@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { getSamplesController } from "../controllers/sample.controller";
+import {
+  getSampleController,
+  getSamplesController,
+} from "../controllers/sample.controller";
 
 const router = Router();
 
 router.get("/", getSamplesController);
+router.get("/:id", getSampleController);
 
 export default router;
