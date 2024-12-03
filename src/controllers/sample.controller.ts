@@ -22,6 +22,7 @@ export const getSampleController = async (
 ) => {
   try {
     const id = Number(req.params.id);
+    console.log("udah bener nih");
     const result = await getSampleService(id);
     res.status(200).send(result);
   } catch (error) {
