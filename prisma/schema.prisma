@@ -15,23 +15,23 @@ datasource db {
 }
 
 model User {
-  id              Int            @id @default(autoincrement())
-  full_name       String
-  email           String         @unique
-  password        String
-  profile_picture String?
-  referral_code   String         @unique
-  phone_number    String
-  role            Role
-  isDeleted       Boolean        @default(false)
-  events          Event[]
-  reviews         Review[]
-  transactions    Transaction[]
-  coupons         Coupon[]
-  referralsMade   Referral[]     @relation("ReferralsAsReferrer")
-  referralsUsed   Referral?      @relation("ReferralsAsReferee")
-  points          Point[]
-  notifications   Notification[]
+  id             Int            @id @default(autoincrement())
+  fullName       String
+  email          String         @unique
+  password       String
+  profilePicture String?
+  referralCode   String         @unique
+  phoneNumber    String
+  role           Role
+  isDeleted      Boolean        @default(false)
+  events         Event[]
+  reviews        Review[]
+  transactions   Transaction[]
+  coupons        Coupon[]
+  referralsMade  Referral[]     @relation("ReferralsAsReferrer")
+  referralsUsed  Referral?      @relation("ReferralsAsReferee")
+  points         Point[]
+  notifications  Notification[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -71,23 +71,23 @@ model Point {
 }
 
 model Event {
-  id              Int           @id @default(autoincrement())
-  title           String
-  description     String
-  price           Int
-  available_seats Int
-  start_date      DateTime
-  end_date        DateTime
-  thumbnnail      String
-  userId          Int
-  organizer       User          @relation(fields: [userId], references: [id])
-  categoryId      Int
-  category        Category      @relation(fields: [categoryId], references: [id])
-  cityId          Int
-  city            City          @relation(fields: [cityId], references: [id])
-  reviews         Review[]
-  transactions    Transaction[]
-  vouchers        Voucher[]
+  id             Int           @id @default(autoincrement())
+  title          String
+  description    String
+  price          Int
+  availableSeats Int
+  startDate      DateTime
+  endDate        DateTime
+  thumbnnail     String
+  userId         Int
+  organizer      User          @relation(fields: [userId], references: [id])
+  categoryId     Int
+  category       Category      @relation(fields: [categoryId], references: [id])
+  cityId         Int
+  city           City          @relation(fields: [cityId], references: [id])
+  reviews        Review[]
+  transactions   Transaction[]
+  vouchers       Voucher[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -137,20 +137,20 @@ model Review {
 }
 
 model Transaction {
-  id            Int      @id @default(autoincrement())
-  userId        Int
-  user          User     @relation(fields: [userId], references: [id])
-  eventId       Int
-  event         Event    @relation(fields: [eventId], references: [id])
-  qty           Int
-  total_price   Int
-  payment_proof String
-  status        Status
-  voucherId     Int?     @unique
-  voucher       Voucher? @relation(fields: [voucherId], references: [id])
-  couponId      Int?     @unique
-  coupon        Coupon?  @relation(fields: [couponId], references: [id])
-  points        Point[]
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id])
+  eventId      Int
+  event        Event    @relation(fields: [eventId], references: [id])
+  qty          Int
+  totalPrice   Int
+  paymentProof String
+  status       Status
+  voucherId    Int?     @unique
+  voucher      Voucher? @relation(fields: [voucherId], references: [id])
+  couponId     Int?     @unique
+  coupon       Coupon?  @relation(fields: [couponId], references: [id])
+  points       Point[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -171,8 +171,8 @@ model Voucher {
   event        Event        @relation(fields: [eventId], references: [id])
   code         String       @unique
   amount       Int
-  is_used      Boolean
-  expires_at   DateTime
+  isUsed       Boolean
+  expiresAt    DateTime
   transactions Transaction?
 
   createdAt DateTime @default(now())
@@ -186,8 +186,8 @@ model Coupon {
   userId       Int
   user         User         @relation(fields: [userId], references: [id])
   amount       Int
-  is_used      Boolean
-  expires_at   DateTime
+  isUsed       Boolean
+  expiresAt    DateTime
   transactions Transaction?
 
   createdAt DateTime @default(now())
@@ -201,7 +201,7 @@ model Notification {
   userId  Int
   user    User    @relation(fields: [userId], references: [id])
   message String
-  is_read Boolean
+  isRead  Boolean
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
