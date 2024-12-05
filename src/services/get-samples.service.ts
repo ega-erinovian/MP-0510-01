@@ -1,10 +1,10 @@
-import { prisma } from "../lib/prisma";
+// import { prisma } from "../lib/prisma";
 
-export const getSamplesService = async () => {
-  try {
-    const samples = prisma.sample.findMany();
-    return samples;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getSamplesService = async () => {
+//   try {
+//     const samples = prisma.sample.findMany();
+//     return samples;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
