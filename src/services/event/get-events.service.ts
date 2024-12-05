@@ -2,7 +2,7 @@ import { prisma } from "../../lib/prisma";
 
 export const getEventsService = async () => {
   try {
-    const evenets = prisma.event.findMany({
+    const events = prisma.event.findMany({
       include: {
         organizer: {
           select: {
@@ -24,7 +24,7 @@ export const getEventsService = async () => {
         },
       },
     });
-    return evenets;
+    return events;
   } catch (error) {
     throw error;
   }
