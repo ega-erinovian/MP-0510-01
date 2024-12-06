@@ -20,7 +20,7 @@ model User {
   email          String         @unique
   password       String
   profilePicture String?
-  referralCode   String         @unique
+  referralCode   String?        @unique
   phoneNumber    String
   role           Role
   isDeleted      Boolean        @default(false)
