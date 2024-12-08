@@ -2,7 +2,7 @@ import { prisma } from "../../lib/prisma";
 
 export const getCitiesByCountryService = async (country: string) => {
   try {
-    const events = prisma.city.findMany({
+    const cities = prisma.city.findMany({
       where: {
         country: {
           name: country,
@@ -17,7 +17,7 @@ export const getCitiesByCountryService = async (country: string) => {
         },
       },
     });
-    return events;
+    return cities;
   } catch (error) {
     throw error;
   }
