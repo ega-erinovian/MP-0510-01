@@ -24,6 +24,8 @@ model User {
   phoneNumber    String
   role           Role
   isDeleted      Boolean        @default(false)
+  cityId         Int
+  city           City           @relation(fields: [cityId], references: [id])
   events         Event[]
   reviews        Review[]
   transactions   Transaction[]
@@ -109,6 +111,7 @@ model City {
   countryId Int
   country   Country @relation(fields: [countryId], references: [id])
   events    Event[]
+  users     User[]
 
   @@map("cities")
 }
