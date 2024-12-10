@@ -174,7 +174,7 @@ model Voucher {
   event        Event        @relation(fields: [eventId], references: [id])
   code         String       @unique
   amount       Int
-  isUsed       Boolean
+  isUsed       Boolean      @default(false)
   expiresAt    DateTime
   transactions Transaction?
 
