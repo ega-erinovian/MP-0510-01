@@ -1,8 +1,35 @@
+import { Prisma } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
+import { PaginationQueryParams } from "../../types/pagination";
 
-export const getEventsService = async () => {
+interface GetBlogQuery extends PaginationQueryParams {
+  search?: string;
+  categoryId?: number;
+}
+
+export const getEventsService = async (query: GetBlogQuery) => {
   try {
-    const events = prisma.event.findMany({
+    const { page, sortBy, sortOrder, take, search, categoryId } = query;
+
+    const parsedCategoryId = categoryId && Number(categoryId);
+
+    const whereClause: Prisma.EventWhereInput = {};
+
+    if (parsedCategoryId) {
+      whereClause.categoryId = parsedCategoryId; // Use parsed value
+    }
+
+    if (search) {
+      whereClause.OR = [{ title: { contains: search, mode: "insensitive" } }];
+    }
+
+    const events = await prisma.event.findMany({
+      where: whereClause,
+      skip: (page - 1) * take, // offset
+      take: take, // limit
+      orderBy: {
+        [sortBy]: sortOrder,
+      },
       include: {
         organizer: {
           select: {
@@ -24,7 +51,12 @@ export const getEventsService = async () => {
         },
       },
     });
-    return events;
+
+    const count = await prisma.event.count({
+      where: whereClause,
+    });
+
+    return { data: events, meta: { page, take, total: count } };
   } catch (error) {
     throw error;
   }
