@@ -7,7 +7,16 @@ export const getEventsController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await getEventsService();
+    const query = {
+      take: parseInt(req.query.take as string) || 3,
+      page: parseInt(req.query.page as string) || 1,
+      sortBy: (req.query.sortBy as string) || "id",
+      sortOrder: (req.query.sortOrder as string) || "desc",
+      search: (req.query.search as string) || "",
+      categoryId: parseInt(req.query.categoryId as string) || 0,
+    };
+
+    const result = await getEventsService(query);
     res.status(200).send(result);
   } catch (error) {
     next(error);
