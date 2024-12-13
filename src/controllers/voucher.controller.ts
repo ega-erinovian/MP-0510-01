@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { getVouchersByEventService } from "../services/vouchers/get-vouchers-by-event.service";
 import { createVoucherService } from "../services/vouchers/create-voucher.service";
 import { getVouchersService } from "../services/vouchers/get-vouchers.service";
+import { updateVoucherService } from "../services/vouchers/update-voucher.service";
 
 export const getVouchersController = async (
   req: Request,
@@ -46,6 +47,20 @@ export const createVoucherController = async (
 ) => {
   try {
     const result = await createVoucherService(req.body);
+    res.status(200).send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateVoucherController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const result = await updateVoucherService(req.body, parseInt(id));
     res.status(200).send(result);
   } catch (error) {
     next(error);
