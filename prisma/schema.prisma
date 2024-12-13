@@ -189,7 +189,7 @@ model Coupon {
   userId       Int
   user         User         @relation(fields: [userId], references: [id])
   amount       Int
-  isUsed       Boolean
+  isUsed       Boolean      @default(false)
   expiresAt    DateTime
   transactions Transaction?
 
@@ -204,7 +204,7 @@ model Notification {
   userId  Int
   user    User    @relation(fields: [userId], references: [id])
   message String
-  isRead  Boolean
+  isRead  Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
