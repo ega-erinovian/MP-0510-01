@@ -2,12 +2,12 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 import { PaginationQueryParams } from "../../types/pagination";
 
-interface GetBlogQuery extends PaginationQueryParams {
+interface GetEventQuery extends PaginationQueryParams {
   search?: string;
   categoryId?: number;
 }
 
-export const getEventsService = async (query: GetBlogQuery) => {
+export const getEventsService = async (query: GetEventQuery) => {
   try {
     const { page, sortBy, sortOrder, take, search, categoryId } = query;
 
