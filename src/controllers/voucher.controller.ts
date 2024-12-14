@@ -3,6 +3,8 @@ import { getVouchersByEventService } from "../services/vouchers/get-vouchers-by-
 import { createVoucherService } from "../services/vouchers/create-voucher.service";
 import { getVouchersService } from "../services/vouchers/get-vouchers.service";
 import { updateVoucherService } from "../services/vouchers/update-voucher.service";
+import { deleteVoucherService } from "../services/vouchers/delete-voucher.service";
+import { getVoucherService } from "../services/vouchers/get-voucher.service";
 
 export const getVouchersController = async (
   req: Request,
@@ -20,6 +22,20 @@ export const getVouchersController = async (
     };
 
     const result = await getVouchersService(query);
+    res.status(200).send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getVoucherController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const result = await getVoucherService(parseInt(id));
     res.status(200).send(result);
   } catch (error) {
     next(error);
@@ -61,6 +77,20 @@ export const updateVoucherController = async (
   try {
     const { id } = req.params;
     const result = await updateVoucherService(req.body, parseInt(id));
+    res.status(200).send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteVoucherController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const result = await deleteVoucherService(parseInt(id));
     res.status(200).send(result);
   } catch (error) {
     next(error);
