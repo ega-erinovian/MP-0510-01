@@ -147,8 +147,8 @@ model Transaction {
   event        Event    @relation(fields: [eventId], references: [id])
   qty          Int
   totalPrice   Int
-  paymentProof String
-  status       Status
+  paymentProof String?
+  status       Status   @default(UNPAID)
   voucherId    Int?     @unique
   voucher      Voucher? @relation(fields: [voucherId], references: [id])
   couponId     Int?     @unique
@@ -163,9 +163,11 @@ model Transaction {
 
 enum Status {
   UNPAID
-  PROCESSING
-  PAID
-  FAILED
+  CONFIRMING
+  DONE
+  REJECTED
+  EXPIRED
+  CANCELED
 }
 
 model Voucher {
