@@ -6,6 +6,7 @@ import cityRouter from "./routes/city.router";
 import countryRouter from "./routes/country.router";
 import voucherRouter from "./routes/voucher.router";
 import categoryRouter from "./routes/category.router";
+import transactionRouter from "./routes/transaction.router";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/cities", cityRouter);
 app.use("/countries", countryRouter);
 app.use("/vouchers", voucherRouter);
 app.use("/categories", categoryRouter);
+app.use("/transactions", transactionRouter);
 
 // middleware error
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

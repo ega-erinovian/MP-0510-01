@@ -13,12 +13,12 @@ export const getVouchersController = async (
 ) => {
   try {
     const query = {
-      take: parseInt(req.query.take as string) || 3,
+      take: parseInt(req.query.take as string) || 10,
       page: parseInt(req.query.page as string) || 1,
       sortBy: (req.query.sortBy as string) || "id",
       sortOrder: (req.query.sortOrder as string) || "desc",
       search: (req.query.search as string) || "",
-      eventId: parseInt(req.query.categoryId as string) || 0,
+      eventId: parseInt(req.query.eventId as string) || 0,
     };
 
     const result = await getVouchersService(query);
