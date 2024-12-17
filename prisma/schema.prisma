@@ -9,9 +9,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -148,6 +148,7 @@ model Transaction {
   qty          Int
   totalPrice   Int
   paymentProof String?
+  isDeleted    Boolean  @default(false)
   status       Status   @default(UNPAID)
   voucherId    Int?     @unique
   voucher      Voucher? @relation(fields: [voucherId], references: [id])

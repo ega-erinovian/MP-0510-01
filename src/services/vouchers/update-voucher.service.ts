@@ -1,4 +1,3 @@
-import { Voucher } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
 interface UpdateVoucherBody {

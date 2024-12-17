@@ -10,7 +10,9 @@ export const getTransactionsService = async (query: GetTransactionsQuery) => {
   try {
     const { page, sortBy, sortOrder, take, search } = query;
 
-    const whereClause: Prisma.TransactionWhereInput = {};
+    const whereClause: Prisma.TransactionWhereInput = {
+      isDeleted: false,
+    };
 
     if (search) {
       whereClause.OR = [
