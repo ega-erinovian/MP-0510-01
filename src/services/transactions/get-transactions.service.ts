@@ -4,15 +4,20 @@ import { PaginationQueryParams } from "../../types/pagination";
 
 interface GetTransactionsQuery extends PaginationQueryParams {
   search?: string;
+  eventId?: number;
 }
 
 export const getTransactionsService = async (query: GetTransactionsQuery) => {
   try {
-    const { page, sortBy, sortOrder, take, search } = query;
+    const { page, sortBy, sortOrder, take, search, eventId } = query;
 
     const whereClause: Prisma.TransactionWhereInput = {
       isDeleted: false,
     };
+
+    if (eventId) {
+      whereClause.eventId = eventId;
+    }
 
     if (search) {
       whereClause.OR = [
@@ -34,6 +39,7 @@ export const getTransactionsService = async (query: GetTransactionsQuery) => {
             fullName: true,
             email: true,
             phoneNumber: true,
+            reviews: true,
           },
         },
         event: {

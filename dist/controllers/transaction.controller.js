@@ -21,6 +21,7 @@ const getTransactionsController = (req, res, next) => __awaiter(void 0, void 0, 
             sortBy: req.query.sortBy || "id",
             sortOrder: req.query.sortOrder || "desc",
             search: req.query.search || "",
+            eventId: parseInt(req.query.eventId) || 0,
         };
         const result = yield (0, get_transactions_service_1.getTransactionsService)(query);
         res.status(200).send(result);

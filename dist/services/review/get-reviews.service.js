@@ -9,24 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTransactionsService = void 0;
+exports.getReviewsService = void 0;
 const prisma_1 = require("../../lib/prisma");
-const getTransactionsService = (query) => __awaiter(void 0, void 0, void 0, function* () {
+const getReviewsService = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { page, sortBy, sortOrder, take, search, eventId } = query;
-        const whereClause = {
-            isDeleted: false,
-        };
-        if (eventId) {
-            whereClause.eventId = eventId;
+        const { page, sortBy, sortOrder, take, userId } = query;
+        const whereClause = {};
+        if (userId) {
+            whereClause.userId = userId;
         }
-        if (search) {
-            whereClause.OR = [
-                { user: { fullName: { contains: search, mode: "insensitive" } } },
-                { event: { title: { contains: search, mode: "insensitive" } } },
-            ];
-        }
-        const transactions = yield prisma_1.prisma.transaction.findMany({
+        const reviews = yield prisma_1.prisma.review.findMany({
             where: whereClause,
             skip: (page - 1) * take, // offset
             take: take, // limit
@@ -39,27 +31,24 @@ const getTransactionsService = (query) => __awaiter(void 0, void 0, void 0, func
                         fullName: true,
                         email: true,
                         phoneNumber: true,
-                        reviews: true,
                     },
                 },
                 event: {
                     select: {
                         title: true,
                         category: true,
-                        price: true,
-                        availableSeats: true,
                         userId: true,
                     },
                 },
             },
         });
-        const count = yield prisma_1.prisma.transaction.count({
+        const count = yield prisma_1.prisma.review.count({
             where: whereClause,
         });
-        return { data: transactions, meta: { page, take, total: count } };
+        return { data: reviews, meta: { page, take, total: count } };
     }
     catch (error) {
         throw error;
     }
 });
-exports.getTransactionsService = getTransactionsService;
+exports.getReviewsService = getReviewsService;
