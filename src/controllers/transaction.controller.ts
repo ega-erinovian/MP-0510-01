@@ -15,6 +15,7 @@ export const getTransactionsController = async (
       sortBy: (req.query.sortBy as string) || "id",
       sortOrder: (req.query.sortOrder as string) || "desc",
       search: (req.query.search as string) || "",
+      eventId: parseInt(req.query.eventId as string) || 0,
     };
 
     const result = await getTransactionsService(query);
