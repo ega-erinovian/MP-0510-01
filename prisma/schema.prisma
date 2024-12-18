@@ -47,12 +47,15 @@ enum Role {
 }
 
 model Referral {
-  id             Int      @id @default(autoincrement())
+  id             Int    @id @default(autoincrement())
+  code           String @unique
   referrerUserId Int
-  refereeUserId  Int      @unique
-  referrerUser   User     @relation("ReferralsAsReferrer", fields: [referrerUserId], references: [id])
-  refereeUser    User     @relation("ReferralsAsReferee", fields: [refereeUserId], references: [id])
-  createdAt      DateTime @default(now())
+  refereeUserId  Int?   @unique
+  referrerUser   User   @relation("ReferralsAsReferrer", fields: [referrerUserId], references: [id])
+  refereeUser    User?  @relation("ReferralsAsReferee", fields: [refereeUserId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("referrals")
 }

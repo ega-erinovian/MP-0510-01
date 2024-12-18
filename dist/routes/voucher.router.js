@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const voucher_controller_1 = require("../controllers/voucher.controller");
+const voucher_validator_1 = require("../validators/voucher.validator");
+const router = (0, express_1.Router)();
+router.get("/", voucher_controller_1.getVouchersController);
+router.get("/:id", voucher_controller_1.getVoucherController);
+router.get("/filter/event", voucher_controller_1.getVouchersByEventController);
+router.post("/", voucher_validator_1.validateCreateVoucher, voucher_controller_1.createVoucherController);
+router.patch("/:id", voucher_validator_1.validateUpdateVoucher, voucher_controller_1.updateVoucherController);
+router.delete("/:id", voucher_controller_1.deleteVoucherController);
+exports.default = router;
