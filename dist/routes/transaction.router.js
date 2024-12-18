@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const transaction_controller_1 = require("../controllers/transaction.controller");
+const transaction_validator_1 = require("../validators/transaction.validator");
+const router = (0, express_1.Router)();
+router.get("/", transaction_controller_1.getTransactionsController);
+router.patch("/:id", transaction_validator_1.validateUpdateTransaction, transaction_controller_1.updateTransactionController);
+router.delete("/:id", transaction_controller_1.deleteTransactionController);
+exports.default = router;
