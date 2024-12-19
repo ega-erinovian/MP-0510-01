@@ -9,19 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getReviewsService = void 0;
+exports.getAttendeesService = void 0;
 const prisma_1 = require("../../lib/prisma");
-const getReviewsService = (query) => __awaiter(void 0, void 0, void 0, function* () {
+const getAttendeesService = (transactionId, query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { page, sortBy, sortOrder, take, userId, eventId } = query;
-        const whereClause = {};
-        if (userId) {
-            whereClause.userId = userId;
-        }
-        if (eventId) {
-            whereClause.eventId = eventId;
-        }
-        const reviews = yield prisma_1.prisma.review.findMany({
+        const { page, sortBy, sortOrder, take } = query;
+        const whereClause = {
+            isDeleted: false,
+            transactions: { some: { status: "DONE", id: transactionId } },
+        };
+        const attendeList = yield prisma_1.prisma.user.findMany({
             where: whereClause,
             skip: (page - 1) * take, // offset
             take: take, // limit
@@ -29,29 +26,20 @@ const getReviewsService = (query) => __awaiter(void 0, void 0, void 0, function*
                 [sortBy]: sortOrder,
             },
             include: {
-                user: {
+                transactions: {
                     select: {
-                        fullName: true,
-                        email: true,
-                        phoneNumber: true,
-                    },
-                },
-                event: {
-                    select: {
-                        title: true,
-                        category: true,
-                        userId: true,
+                        qty: true,
                     },
                 },
             },
         });
-        const count = yield prisma_1.prisma.review.count({
+        const count = yield prisma_1.prisma.user.count({
             where: whereClause,
         });
-        return { data: reviews, meta: { page, take, total: count } };
+        return { data: attendeList, meta: { page, take, total: count } };
     }
     catch (error) {
         throw error;
     }
 });
-exports.getReviewsService = getReviewsService;
+exports.getAttendeesService = getAttendeesService;
