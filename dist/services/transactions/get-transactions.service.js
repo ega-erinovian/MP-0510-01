@@ -13,12 +13,15 @@ exports.getTransactionsService = void 0;
 const prisma_1 = require("../../lib/prisma");
 const getTransactionsService = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { page, sortBy, sortOrder, take, search, eventId } = query;
+        const { page, sortBy, sortOrder, take, search, status, eventId } = query;
         const whereClause = {
             isDeleted: false,
         };
         if (eventId) {
             whereClause.eventId = eventId;
+        }
+        if (status) {
+            whereClause.status = status;
         }
         if (search) {
             whereClause.OR = [
@@ -39,16 +42,13 @@ const getTransactionsService = (query) => __awaiter(void 0, void 0, void 0, func
                         fullName: true,
                         email: true,
                         phoneNumber: true,
-                        reviews: true,
                     },
                 },
                 event: {
                     select: {
                         title: true,
-                        category: true,
                         price: true,
                         availableSeats: true,
-                        userId: true,
                     },
                 },
             },

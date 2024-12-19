@@ -4,16 +4,21 @@ import { PaginationQueryParams } from "../../types/pagination";
 
 interface GetReviewsQuery extends PaginationQueryParams {
   userId?: number;
+  eventId?: number;
 }
 
 export const getReviewsService = async (query: GetReviewsQuery) => {
   try {
-    const { page, sortBy, sortOrder, take, userId } = query;
+    const { page, sortBy, sortOrder, take, userId, eventId } = query;
 
     const whereClause: Prisma.ReviewWhereInput = {};
 
     if (userId) {
       whereClause.userId = userId;
+    }
+
+    if (eventId) {
+      whereClause.eventId = eventId;
     }
 
     const reviews = await prisma.review.findMany({

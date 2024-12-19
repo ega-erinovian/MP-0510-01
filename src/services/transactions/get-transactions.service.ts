@@ -1,15 +1,16 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, Status } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 import { PaginationQueryParams } from "../../types/pagination";
 
 interface GetTransactionsQuery extends PaginationQueryParams {
   search?: string;
+  status?: string;
   eventId?: number;
 }
 
 export const getTransactionsService = async (query: GetTransactionsQuery) => {
   try {
-    const { page, sortBy, sortOrder, take, search, eventId } = query;
+    const { page, sortBy, sortOrder, take, search, status, eventId } = query;
 
     const whereClause: Prisma.TransactionWhereInput = {
       isDeleted: false,
@@ -17,6 +18,10 @@ export const getTransactionsService = async (query: GetTransactionsQuery) => {
 
     if (eventId) {
       whereClause.eventId = eventId;
+    }
+
+    if (status) {
+      whereClause.status = status as Status;
     }
 
     if (search) {
@@ -39,16 +44,13 @@ export const getTransactionsService = async (query: GetTransactionsQuery) => {
             fullName: true,
             email: true,
             phoneNumber: true,
-            reviews: true,
           },
         },
         event: {
           select: {
             title: true,
-            category: true,
             price: true,
             availableSeats: true,
-            userId: true,
           },
         },
       },

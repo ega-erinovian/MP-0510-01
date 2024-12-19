@@ -14,6 +14,7 @@ const category_router_1 = __importDefault(require("./routes/category.router"));
 const transaction_router_1 = __importDefault(require("./routes/transaction.router"));
 const referral_router_1 = __importDefault(require("./routes/referral.router"));
 const review_router_1 = __importDefault(require("./routes/review.router"));
+const attendee_router_1 = __importDefault(require("./routes/attendee.router"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
@@ -26,6 +27,7 @@ app.use("/categories", category_router_1.default);
 app.use("/transactions", transaction_router_1.default);
 app.use("/referrals", referral_router_1.default);
 app.use("/reviews", review_router_1.default);
+app.use("/attendees", attendee_router_1.default);
 // middleware error
 app.use((err, req, res, next) => {
     res.status(400).send(err.message);
