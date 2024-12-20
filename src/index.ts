@@ -10,6 +10,9 @@ import transactionRouter from "./routes/transaction.router";
 import referralRouter from "./routes/referral.router";
 import reviewRouter from "./routes/review.router";
 import attendeeRouter from "./routes/attendee.router";
+import userRouter from "./routes/user.router";
+import authRouter from "./routes/auth.router";
+import couponRouter from "./routes/coupon.router";
 
 const app = express();
 
@@ -26,6 +29,9 @@ app.use("/transactions", transactionRouter);
 app.use("/referrals", referralRouter);
 app.use("/reviews", reviewRouter);
 app.use("/attendees", attendeeRouter);
+app.use("/users", userRouter);
+app.use("/auth", authRouter);
+app.use("/coupons", couponRouter);
 
 // middleware error
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

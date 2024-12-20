@@ -3,10 +3,10 @@ import { prisma } from "../../lib/prisma";
 
 export const createReferralService = async (body: Referral) => {
   try {
-    const { referrerUserId, code } = body;
+    const { referrerUserId, refereeUserId } = body;
 
     const existingReferral = await prisma.referral.findFirst({
-      where: { code },
+      where: { refereeUserId },
     });
 
     if (existingReferral) {
@@ -15,8 +15,7 @@ export const createReferralService = async (body: Referral) => {
 
     return await prisma.referral.create({
       data: {
-        referrerUserId,
-        code,
+        ...body,
       },
     });
   } catch (error) {

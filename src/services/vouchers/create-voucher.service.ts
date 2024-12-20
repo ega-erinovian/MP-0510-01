@@ -3,7 +3,7 @@ import { prisma } from "../../lib/prisma";
 
 export const createVoucherService = async (body: Voucher) => {
   try {
-    const { eventId, code, amount, expiresAt } = body;
+    const { code } = body;
 
     const existingVoucher = await prisma.voucher.findFirst({
       where: { code },
@@ -15,10 +15,7 @@ export const createVoucherService = async (body: Voucher) => {
 
     return await prisma.voucher.create({
       data: {
-        eventId,
-        code,
-        amount,
-        expiresAt,
+        ...body,
       },
     });
   } catch (error) {

@@ -9,23 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createReferralService = void 0;
+exports.checkReferralService = void 0;
 const prisma_1 = require("../../lib/prisma");
-const createReferralService = (body) => __awaiter(void 0, void 0, void 0, function* () {
+const checkReferralService = (code) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { referrerUserId, refereeUserId } = body;
-        const existingReferral = yield prisma_1.prisma.referral.findFirst({
-            where: { refereeUserId },
+        const whereClause = {
+            isDeleted: false,
+            referralCode: code,
+        };
+        const users = yield prisma_1.prisma.user.findMany({
+            where: whereClause,
         });
-        if (existingReferral) {
-            throw new Error("Referral already exist");
-        }
-        return yield prisma_1.prisma.referral.create({
-            data: Object.assign({}, body),
-        });
+        return users;
     }
     catch (error) {
         throw error;
     }
 });
-exports.createReferralService = createReferralService;
+exports.checkReferralService = checkReferralService;

@@ -26,14 +26,15 @@ model User {
   isDeleted      Boolean        @default(false)
   cityId         Int
   city           City           @relation(fields: [cityId], references: [id])
+  point          Int            @default(0)
+  pointExpired   DateTime?
   events         Event[]
   reviews        Review[]
   transactions   Transaction[]
   coupons        Coupon[]
-  referralsMade  Referral[]     @relation("ReferralsAsReferrer")
-  referralsUsed  Referral?      @relation("ReferralsAsReferee")
-  points         Point[]
   notifications  Notification[]
+  referralsMade  Referral[]     @relation("ReferralsAsReferrer") // Referrals this user created (as a referrer)
+  referralsUsed  Referral[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -47,32 +48,16 @@ enum Role {
 }
 
 model Referral {
-  id             Int    @id @default(autoincrement())
-  code           String @unique
-  referrerUserId Int
-  refereeUserId  Int?   @unique
-  referrerUser   User   @relation("ReferralsAsReferrer", fields: [referrerUserId], references: [id])
-  refereeUser    User?  @relation("ReferralsAsReferee", fields: [refereeUserId], references: [id])
+  id             Int   @id @default(autoincrement())
+  referrerUserId Int // The user who owns this referral code
+  referrerUser   User  @relation("ReferralsAsReferrer", fields: [referrerUserId], references: [id])
+  refereeUserId  Int? // The user who used this referral code (optional, since multiple users can use the same code)
+  refereeUser    User? @relation(fields: [refereeUserId], references: [id]) // Relation to the referee user
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("referrals")
-}
-
-model Point {
-  id            Int         @id @default(autoincrement())
-  userId        Int
-  user          User        @relation(fields: [userId], references: [id])
-  transactionId Int
-  transaction   Transaction @relation(fields: [transactionId], references: [id])
-  amount        Int
-  description   String
-  expiresAt     DateTime?
-
-  createdAt DateTime @default(now())
-
-  @@map("points")
 }
 
 model Event {
@@ -157,7 +142,6 @@ model Transaction {
   voucher      Voucher? @relation(fields: [voucherId], references: [id])
   couponId     Int?     @unique
   coupon       Coupon?  @relation(fields: [couponId], references: [id])
-  points       Point[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -180,6 +164,7 @@ model Voucher {
   event        Event        @relation(fields: [eventId], references: [id])
   code         String       @unique
   amount       Int
+  quota        Int          @default(1)
   isUsed       Boolean      @default(false)
   expiresAt    DateTime
   transactions Transaction?
@@ -192,6 +177,7 @@ model Voucher {
 
 model Coupon {
   id           Int          @id @default(autoincrement())
+  code         String       @unique
   userId       Int
   user         User         @relation(fields: [userId], references: [id])
   amount       Int
