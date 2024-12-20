@@ -9,18 +9,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createReferralService = void 0;
+exports.updateUserService = void 0;
 const prisma_1 = require("../../lib/prisma");
-const createReferralService = (body) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUserService = (body, id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { referrerUserId, refereeUserId } = body;
-        const existingReferral = yield prisma_1.prisma.referral.findFirst({
-            where: { refereeUserId },
+        const { email } = body;
+        // Find the existing voucher by ID
+        const existingUser = yield prisma_1.prisma.user.findUnique({
+            where: { id },
         });
-        if (existingReferral) {
-            throw new Error("Referral already exist");
+        if (!existingUser) {
+            throw new Error("User not found");
         }
-        return yield prisma_1.prisma.referral.create({
+        if (email) {
+            const existingEmail = yield prisma_1.prisma.user.findFirst({
+                where: { email },
+            });
+            if (existingEmail) {
+                throw new Error("Email already exist");
+            }
+        }
+        // Update the voucher
+        return yield prisma_1.prisma.user.update({
+            where: { id },
             data: Object.assign({}, body),
         });
     }
@@ -28,4 +39,4 @@ const createReferralService = (body) => __awaiter(void 0, void 0, void 0, functi
         throw error;
     }
 });
-exports.createReferralService = createReferralService;
+exports.updateUserService = updateUserService;

@@ -9,23 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createReferralService = void 0;
-const prisma_1 = require("../../lib/prisma");
-const createReferralService = (body) => __awaiter(void 0, void 0, void 0, function* () {
+exports.registerController = void 0;
+const register_service_1 = require("../services/auth/register.service");
+const registerController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        const { referrerUserId, refereeUserId } = body;
-        const existingReferral = yield prisma_1.prisma.referral.findFirst({
-            where: { refereeUserId },
-        });
-        if (existingReferral) {
-            throw new Error("Referral already exist");
-        }
-        return yield prisma_1.prisma.referral.create({
-            data: Object.assign({}, body),
-        });
+        const files = req.files;
+        const result = yield (0, register_service_1.registerService)(req.body, (_a = files.profilePicture) === null || _a === void 0 ? void 0 : _a[0]);
+        res.status(200).send(result);
     }
     catch (error) {
-        throw error;
+        next(error);
     }
 });
-exports.createReferralService = createReferralService;
+exports.registerController = registerController;

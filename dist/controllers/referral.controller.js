@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createReferralController = void 0;
+exports.getReferralsController = exports.createReferralController = void 0;
 const create_referral_service_1 = require("../services/referral/create-referral.service");
+const get_referrals_service_1 = require("../services/referral/get-referrals.service");
 const createReferralController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, create_referral_service_1.createReferralService)(req.body);
@@ -21,3 +22,20 @@ const createReferralController = (req, res, next) => __awaiter(void 0, void 0, v
     }
 });
 exports.createReferralController = createReferralController;
+const getReferralsController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const query = {
+            take: parseInt(req.query.take) || 10,
+            page: parseInt(req.query.page) || 1,
+            sortBy: req.query.sortBy || "id",
+            sortOrder: req.query.sortOrder || "desc",
+            referralCode: req.query.referralCode || "",
+        };
+        const result = yield (0, get_referrals_service_1.getReferralsService)(query);
+        res.status(200).send(result);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getReferralsController = getReferralsController;

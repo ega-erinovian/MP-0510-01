@@ -9,23 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createReferralService = void 0;
-const prisma_1 = require("../../lib/prisma");
-const createReferralService = (body) => __awaiter(void 0, void 0, void 0, function* () {
+exports.createCouponController = void 0;
+const create_coupon_service_1 = require("../services/coupon/create-coupon.service");
+const createCouponController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { referrerUserId, refereeUserId } = body;
-        const existingReferral = yield prisma_1.prisma.referral.findFirst({
-            where: { refereeUserId },
-        });
-        if (existingReferral) {
-            throw new Error("Referral already exist");
-        }
-        return yield prisma_1.prisma.referral.create({
-            data: Object.assign({}, body),
-        });
+        const result = yield (0, create_coupon_service_1.createCouponService)(req.body);
+        res.status(200).send(result);
     }
     catch (error) {
-        throw error;
+        next(error);
     }
 });
-exports.createReferralService = createReferralService;
+exports.createCouponController = createCouponController;

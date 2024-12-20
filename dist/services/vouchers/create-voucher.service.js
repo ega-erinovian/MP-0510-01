@@ -13,7 +13,7 @@ exports.createVoucherService = void 0;
 const prisma_1 = require("../../lib/prisma");
 const createVoucherService = (body) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { eventId, code, amount, expiresAt } = body;
+        const { code } = body;
         const existingVoucher = yield prisma_1.prisma.voucher.findFirst({
             where: { code },
         });
@@ -21,12 +21,7 @@ const createVoucherService = (body) => __awaiter(void 0, void 0, void 0, functio
             throw new Error("Voucher already exist");
         }
         return yield prisma_1.prisma.voucher.create({
-            data: {
-                eventId,
-                code,
-                amount,
-                expiresAt,
-            },
+            data: Object.assign({}, body),
         });
     }
     catch (error) {
