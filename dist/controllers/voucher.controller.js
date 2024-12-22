@@ -25,6 +25,7 @@ const getVouchersController = (req, res, next) => __awaiter(void 0, void 0, void
             sortOrder: req.query.sortOrder || "desc",
             search: req.query.search || "",
             eventId: parseInt(req.query.eventId) || 0,
+            userId: parseInt(req.query.userId) || 0,
         };
         const result = yield (0, get_vouchers_service_1.getVouchersService)(query);
         res.status(200).send(result);

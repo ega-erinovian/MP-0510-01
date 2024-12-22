@@ -13,7 +13,7 @@ exports.getVouchersService = void 0;
 const prisma_1 = require("../../lib/prisma");
 const getVouchersService = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { page, sortBy, sortOrder, take, search, eventId } = query;
+        const { page, sortBy, sortOrder, take, search, eventId, userId } = query;
         const parsedEventId = eventId && Number(eventId);
         const whereClause = {};
         if (parsedEventId) {
@@ -24,6 +24,11 @@ const getVouchersService = (query) => __awaiter(void 0, void 0, void 0, function
                 { code: { contains: search } },
                 { event: { title: { contains: search } } },
             ];
+        }
+        if (userId) {
+            whereClause.event = {
+                userId: userId,
+            };
         }
         const vouchers = yield prisma_1.prisma.voucher.findMany({
             where: whereClause,

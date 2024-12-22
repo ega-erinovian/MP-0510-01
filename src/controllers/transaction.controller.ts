@@ -17,6 +17,7 @@ export const getTransactionsController = async (
       search: (req.query.search as string) || "",
       status: (req.query.status as string) || "",
       eventId: parseInt(req.query.eventId as string) || 0,
+      userId: parseInt(req.query.userId as string) || 0,
     };
 
     const result = await getTransactionsService(query);

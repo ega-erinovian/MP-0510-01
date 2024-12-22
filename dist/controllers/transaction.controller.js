@@ -23,6 +23,7 @@ const getTransactionsController = (req, res, next) => __awaiter(void 0, void 0, 
             search: req.query.search || "",
             status: req.query.status || "",
             eventId: parseInt(req.query.eventId) || 0,
+            userId: parseInt(req.query.userId) || 0,
         };
         const result = yield (0, get_transactions_service_1.getTransactionsService)(query);
         res.status(200).send(result);

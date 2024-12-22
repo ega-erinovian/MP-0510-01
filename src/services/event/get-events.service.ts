@@ -4,12 +4,13 @@ import { PaginationQueryParams } from "../../types/pagination";
 
 interface GetEventQuery extends PaginationQueryParams {
   search?: string;
+  userId?: number;
   categoryId?: number;
 }
 
 export const getEventsService = async (query: GetEventQuery) => {
   try {
-    const { page, sortBy, sortOrder, take, search, categoryId } = query;
+    const { page, sortBy, sortOrder, take, search, categoryId, userId } = query;
 
     const parsedCategoryId = categoryId && Number(categoryId);
 
@@ -17,6 +18,10 @@ export const getEventsService = async (query: GetEventQuery) => {
 
     if (parsedCategoryId) {
       whereClause.categoryId = parsedCategoryId; // Use parsed value
+    }
+
+    if (userId) {
+      whereClause.userId = userId;
     }
 
     if (search) {

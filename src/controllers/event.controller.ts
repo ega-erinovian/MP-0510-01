@@ -14,6 +14,7 @@ export const getEventsController = async (
       sortOrder: (req.query.sortOrder as string) || "desc",
       search: (req.query.search as string) || "",
       categoryId: parseInt(req.query.categoryId as string) || 0,
+      userId: parseInt(req.query.userId as string) || 0,
     };
 
     const result = await getEventsService(query);

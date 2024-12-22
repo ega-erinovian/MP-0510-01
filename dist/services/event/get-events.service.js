@@ -13,11 +13,14 @@ exports.getEventsService = void 0;
 const prisma_1 = require("../../lib/prisma");
 const getEventsService = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { page, sortBy, sortOrder, take, search, categoryId } = query;
+        const { page, sortBy, sortOrder, take, search, categoryId, userId } = query;
         const parsedCategoryId = categoryId && Number(categoryId);
         const whereClause = {};
         if (parsedCategoryId) {
             whereClause.categoryId = parsedCategoryId; // Use parsed value
+        }
+        if (userId) {
+            whereClause.userId = userId;
         }
         if (search) {
             whereClause.OR = [{ title: { contains: search, mode: "insensitive" } }];

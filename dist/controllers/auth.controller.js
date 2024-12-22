@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerController = void 0;
+exports.loginController = exports.registerController = void 0;
+const login_service_1 = require("../services/auth/login.service");
 const register_service_1 = require("../services/auth/register.service");
 const registerController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
@@ -23,3 +24,13 @@ const registerController = (req, res, next) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.registerController = registerController;
+const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield (0, login_service_1.loginService)(req.body);
+        res.status(200).send(result);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.loginController = loginController;

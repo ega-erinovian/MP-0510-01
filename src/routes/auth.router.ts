@@ -1,6 +1,9 @@
 import { Router } from "express";
-import { registerController } from "../controllers/auth.controller";
-import { validateRegister } from "../validators/auth.validator";
+import {
+  loginController,
+  registerController,
+} from "../controllers/auth.controller";
+import { validateLogin, validateRegister } from "../validators/auth.validator";
 import { uploader } from "../lib/multer";
 import { fileFilter } from "../lib/fileFilter";
 
@@ -13,5 +16,6 @@ router.post(
   validateRegister,
   registerController
 );
+router.post("/login", validateLogin, loginController);
 
 export default router;
