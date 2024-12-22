@@ -19,6 +19,7 @@ export const getVouchersController = async (
       sortOrder: (req.query.sortOrder as string) || "desc",
       search: (req.query.search as string) || "",
       eventId: parseInt(req.query.eventId as string) || 0,
+      userId: parseInt(req.query.userId as string) || 0,
     };
 
     const result = await getVouchersService(query);

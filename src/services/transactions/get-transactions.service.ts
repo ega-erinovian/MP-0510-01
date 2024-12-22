@@ -6,11 +6,13 @@ interface GetTransactionsQuery extends PaginationQueryParams {
   search?: string;
   status?: string;
   eventId?: number;
+  userId?: number;
 }
 
 export const getTransactionsService = async (query: GetTransactionsQuery) => {
   try {
-    const { page, sortBy, sortOrder, take, search, status, eventId } = query;
+    const { page, sortBy, sortOrder, take, search, status, eventId, userId } =
+      query;
 
     const whereClause: Prisma.TransactionWhereInput = {
       isDeleted: false,
@@ -29,6 +31,12 @@ export const getTransactionsService = async (query: GetTransactionsQuery) => {
         { user: { fullName: { contains: search, mode: "insensitive" } } },
         { event: { title: { contains: search, mode: "insensitive" } } },
       ];
+    }
+
+    if (userId) {
+      whereClause.event = {
+        userId: userId,
+      };
     }
 
     const transactions = await prisma.transaction.findMany({
@@ -51,6 +59,7 @@ export const getTransactionsService = async (query: GetTransactionsQuery) => {
             title: true,
             price: true,
             availableSeats: true,
+            userId: true,
           },
         },
       },

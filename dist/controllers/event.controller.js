@@ -20,6 +20,7 @@ const getEventsController = (req, res, next) => __awaiter(void 0, void 0, void 0
             sortOrder: req.query.sortOrder || "desc",
             search: req.query.search || "",
             categoryId: parseInt(req.query.categoryId) || 0,
+            userId: parseInt(req.query.userId) || 0,
         };
         const result = yield (0, get_events_service_1.getEventsService)(query);
         res.status(200).send(result);

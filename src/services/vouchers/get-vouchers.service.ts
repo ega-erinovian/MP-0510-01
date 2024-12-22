@@ -5,11 +5,12 @@ import { PaginationQueryParams } from "../../types/pagination";
 interface GetVouchersQuery extends PaginationQueryParams {
   search?: string;
   eventId?: number;
+  userId?: number;
 }
 
 export const getVouchersService = async (query: GetVouchersQuery) => {
   try {
-    const { page, sortBy, sortOrder, take, search, eventId } = query;
+    const { page, sortBy, sortOrder, take, search, eventId, userId } = query;
 
     const parsedEventId = eventId && Number(eventId);
 
@@ -24,6 +25,12 @@ export const getVouchersService = async (query: GetVouchersQuery) => {
         { code: { contains: search } },
         { event: { title: { contains: search } } },
       ];
+    }
+
+    if (userId) {
+      whereClause.event = {
+        userId: userId,
+      };
     }
 
     const vouchers = await prisma.voucher.findMany({
