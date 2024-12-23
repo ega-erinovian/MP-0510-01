@@ -9,10 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.forgotPasswordController = exports.loginController = exports.registerController = void 0;
+exports.resetPasswordController = exports.forgotPasswordController = exports.loginController = exports.registerController = void 0;
 const login_service_1 = require("../services/auth/login.service");
 const register_service_1 = require("../services/auth/register.service");
 const forgot_password_service_1 = require("../services/auth/forgot-password.service");
+const reset_password_service_1 = require("../services/auth/reset-password.service");
 const registerController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -45,3 +46,14 @@ const forgotPasswordController = (req, res, next) => __awaiter(void 0, void 0, v
     }
 });
 exports.forgotPasswordController = forgotPasswordController;
+const resetPasswordController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = Number(res.locals.user.id);
+        const result = yield (0, reset_password_service_1.resetPasswordService)(userId, req.body.password);
+        res.status(200).send(result);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.resetPasswordController = resetPasswordController;
