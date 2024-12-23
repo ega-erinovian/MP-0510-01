@@ -9,9 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginController = exports.registerController = void 0;
+exports.forgotPasswordController = exports.loginController = exports.registerController = void 0;
 const login_service_1 = require("../services/auth/login.service");
 const register_service_1 = require("../services/auth/register.service");
+const forgot_password_service_1 = require("../services/auth/forgot-password.service");
 const registerController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -34,3 +35,13 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.loginController = loginController;
+const forgotPasswordController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield (0, forgot_password_service_1.forgotPasswordService)(req.body);
+        res.status(200).send(result);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.forgotPasswordController = forgotPasswordController;
