@@ -2,6 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import { getTransactionsService } from "../services/transactions/get-transactions.service";
 import { deleteTransactionService } from "../services/transactions/delete-transaction.service";
 import { updateTransactionService } from "../services/transactions/update-transaction.service";
+import { getTransactionQuantityService } from "../services/transactions/get-transactions-qty.service";
+import { log } from "console";
+import { getTransactionIncomeService } from "../services/transactions/get-transactions-income.service";
+import { getTransactionIncomePerMonthService } from "../services/transactions/get-transactions-income-per-month.service";
 
 export const getTransactionsController = async (
   req: Request,
@@ -22,6 +26,65 @@ export const getTransactionsController = async (
 
     const result = await getTransactionsService(query);
     res.status(200).send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getTransactionsQuantityController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const query = {
+      timeFilter: (req.query.timeFilter as string) || "day",
+      eventId: parseInt(req.query.eventId as string) || 0,
+      userId: parseInt(req.query.userId as string) || 0,
+    };
+
+    const result = await getTransactionQuantityService(query);
+
+    res.status(200).send({ qty: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getTransactionsIncomeController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const query = {
+      timeFilter: (req.query.timeFilter as string) || "day",
+      eventId: parseInt(req.query.eventId as string) || 0,
+      userId: parseInt(req.query.userId as string) || 0,
+    };
+
+    const result = await getTransactionIncomeService(query);
+
+    res.status(200).send({ income: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getTransactionsIncomePerMonthController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const query = {
+      eventId: parseInt(req.query.eventId as string) || 0,
+      userId: parseInt(req.query.userId as string) || 0,
+    };
+
+    const result = await getTransactionIncomePerMonthService(query);
+
+    res.status(200).send({ income: result });
   } catch (error) {
     next(error);
   }
