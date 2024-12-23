@@ -36,8 +36,6 @@ const getTransactionsService = (query) => __awaiter(void 0, void 0, void 0, func
         }
         const transactions = yield prisma_1.prisma.transaction.findMany({
             where: whereClause,
-            skip: (page - 1) * take, // offset
-            take: take, // limit
             orderBy: {
                 [sortBy]: sortOrder,
             },
@@ -62,7 +60,14 @@ const getTransactionsService = (query) => __awaiter(void 0, void 0, void 0, func
         const count = yield prisma_1.prisma.transaction.count({
             where: whereClause,
         });
-        return { data: transactions, meta: { page, take, total: count } };
+        return {
+            data: transactions,
+            meta: {
+                page,
+                take,
+                total: count,
+            },
+        };
     }
     catch (error) {
         throw error;

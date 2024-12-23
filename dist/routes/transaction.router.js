@@ -5,6 +5,9 @@ const transaction_controller_1 = require("../controllers/transaction.controller"
 const transaction_validator_1 = require("../validators/transaction.validator");
 const router = (0, express_1.Router)();
 router.get("/", transaction_controller_1.getTransactionsController);
+router.get("/filter/quantity", transaction_controller_1.getTransactionsQuantityController);
+router.get("/filter/income", transaction_controller_1.getTransactionsIncomeController);
+router.get("/filter/income-per-month", transaction_controller_1.getTransactionsIncomePerMonthController);
 router.patch("/:id", transaction_validator_1.validateUpdateTransaction, transaction_controller_1.updateTransactionController);
 router.delete("/:id", transaction_controller_1.deleteTransactionController);
 exports.default = router;

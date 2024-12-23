@@ -41,8 +41,6 @@ export const getTransactionsService = async (query: GetTransactionsQuery) => {
 
     const transactions = await prisma.transaction.findMany({
       where: whereClause,
-      skip: (page - 1) * take, // offset
-      take: take, // limit
       orderBy: {
         [sortBy]: sortOrder,
       },
@@ -69,7 +67,14 @@ export const getTransactionsService = async (query: GetTransactionsQuery) => {
       where: whereClause,
     });
 
-    return { data: transactions, meta: { page, take, total: count } };
+    return {
+      data: transactions,
+      meta: {
+        page,
+        take,
+        total: count,
+      },
+    };
   } catch (error) {
     throw error;
   }

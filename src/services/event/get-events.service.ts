@@ -6,11 +6,21 @@ interface GetEventQuery extends PaginationQueryParams {
   search?: string;
   userId?: number;
   categoryId?: number;
+  timeRange?: string;
 }
 
 export const getEventsService = async (query: GetEventQuery) => {
   try {
-    const { page, sortBy, sortOrder, take, search, categoryId, userId } = query;
+    const {
+      page = 1,
+      sortBy = "id",
+      sortOrder = "desc",
+      take,
+      search,
+      categoryId,
+      userId,
+      timeRange,
+    } = query;
 
     const parsedCategoryId = categoryId && Number(categoryId);
 
@@ -28,8 +38,54 @@ export const getEventsService = async (query: GetEventQuery) => {
       whereClause.OR = [{ title: { contains: search, mode: "insensitive" } }];
     }
 
+    if (timeRange) {
+      const now = new Date();
+      let endDate: Date | undefined;
+
+      switch (timeRange) {
+        case "day":
+          endDate = new Date(now.setHours(23, 59, 59, 999));
+          break;
+        case "week":
+          const startOfWeek = new Date(
+            now.setDate(now.getDate() - now.getDay())
+          );
+          endDate = new Date(startOfWeek.setDate(startOfWeek.getDate() + 6));
+          endDate.setHours(23, 59, 59, 999);
+          break;
+        case "month":
+          endDate = new Date(
+            now.getFullYear(),
+            now.getMonth() + 1,
+            0,
+            23,
+            59,
+            59,
+            999
+          );
+          break;
+        case "year":
+          endDate = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
+          break;
+        default:
+          throw new Error("Invalid timeRange value");
+      }
+
+      if (endDate) {
+        whereClause.endDate = {
+          lte: endDate,
+        };
+      }
+    }
+
     const events = await prisma.event.findMany({
       where: whereClause,
+      ...(take !== -1
+        ? {
+            skip: (page - 1) * (take || 10), // Pagination
+            take: take || 10, // Pagination
+          }
+        : {}),
       skip: (page - 1) * take, // offset
       take: take, // limit
       orderBy: {
@@ -61,7 +117,14 @@ export const getEventsService = async (query: GetEventQuery) => {
       where: whereClause,
     });
 
-    return { data: events, meta: { page, take, total: count } };
+    return {
+      data: events,
+      meta: {
+        page: take !== -1 ? page : 1,
+        take: take !== -1 ? take : count,
+        total: count,
+      },
+    };
   } catch (error) {
     throw error;
   }
