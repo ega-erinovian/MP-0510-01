@@ -24,7 +24,9 @@ export const getEventsService = async (query: GetEventQuery) => {
 
     const parsedCategoryId = categoryId && Number(categoryId);
 
-    const whereClause: Prisma.EventWhereInput = {};
+    const whereClause: Prisma.EventWhereInput = {
+      isDeleted: false,
+    };
 
     if (parsedCategoryId) {
       whereClause.categoryId = parsedCategoryId; // Use parsed value

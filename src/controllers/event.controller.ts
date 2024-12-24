@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { getEventsService } from "../services/event/get-events.service";
+import { deleteEventService } from "../services/event/delete-event.service";
 
 export const getEventsController = async (
   req: Request,
@@ -18,6 +19,20 @@ export const getEventsController = async (
     };
 
     const result = await getEventsService(query);
+    res.status(200).send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteEventController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = Number(req.params.id);
+    const result = await deleteEventService(id);
     res.status(200).send(result);
   } catch (error) {
     next(error);

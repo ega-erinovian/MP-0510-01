@@ -1,22 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateUpdateUser = void 0;
+exports.updateUserValidator = void 0;
 const express_validator_1 = require("express-validator");
-exports.validateUpdateUser = [
-    (0, express_validator_1.body)("fullName").optional().isString().withMessage("Name must be a string"),
-    (0, express_validator_1.body)("email").optional().isEmail().withMessage("Email must be a valid email"),
-    (0, express_validator_1.body)("password")
+exports.updateUserValidator = [
+    // Validate body fields (you can add more validation rules based on your schema)
+    (0, express_validator_1.body)("fullName")
         .optional()
         .isString()
-        .withMessage("Password must be a string"),
-    (0, express_validator_1.body)("phoneNumber").optional(),
-    (0, express_validator_1.body)("cityId").optional().isNumeric().withMessage("City ID must be a number"),
-    (0, express_validator_1.body)("point").optional().isNumeric().withMessage("Point must be a number"),
+        .withMessage("Full name must be a string"),
+    (0, express_validator_1.body)("email").optional().isEmail().withMessage("Email must be valid"),
+    (0, express_validator_1.body)("phoneNumber")
+        .optional()
+        .isString()
+        .withMessage("Phone number must be a string"),
+    // Custom validation to handle errors after checking all rules
     (req, res, next) => {
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
-            res.status(400).send({ message: errors.array()[0].msg });
-            return;
+            return res.status(400).json({ errors: errors.array() });
         }
         next();
     },

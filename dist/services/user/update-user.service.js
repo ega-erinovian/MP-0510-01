@@ -10,11 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUserService = void 0;
+const cloudinary_1 = require("../../lib/cloudinary");
 const prisma_1 = require("../../lib/prisma");
-const updateUserService = (body, id) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUserService = (body, id, profilePicture) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email } = body;
-        // Find the existing voucher by ID
         const existingUser = yield prisma_1.prisma.user.findUnique({
             where: { id },
         });
@@ -25,18 +25,23 @@ const updateUserService = (body, id) => __awaiter(void 0, void 0, void 0, functi
             const existingEmail = yield prisma_1.prisma.user.findFirst({
                 where: { email },
             });
-            if (existingEmail) {
-                throw new Error("Email already exist");
+            if (existingEmail && existingEmail.id !== id) {
+                throw new Error("Email already exists");
             }
         }
-        // Update the voucher
-        return yield prisma_1.prisma.user.update({
+        let secure_url = existingUser.profilePicture;
+        if (profilePicture) {
+            secure_url = (yield (0, cloudinary_1.cloudinaryUpload)(profilePicture)).secure_url;
+        }
+        const updatedUser = yield prisma_1.prisma.user.update({
             where: { id },
-            data: Object.assign({}, body),
+            data: Object.assign(Object.assign({}, body), { profilePicture: secure_url }),
         });
+        return updatedUser;
     }
     catch (error) {
-        throw error;
+        console.error("Error updating user:", error);
+        throw new Error(error instanceof Error ? error.message : "Unexpected error");
     }
 });
 exports.updateUserService = updateUserService;
