@@ -1,21 +1,26 @@
+import { User } from "@prisma/client";
+import { cloudinaryUpload } from "../../lib/cloudinary";
 import { prisma } from "../../lib/prisma";
+import { Express } from "express"; // Make sure Express types are included
 
 interface UpdateUserBody {
   fullName?: string;
   email?: string;
   password?: string;
-  profilePicture?: string;
   phoneNumber?: string;
   cityId?: number;
   point?: number;
   pointExpired?: Date;
 }
 
-export const updateUserService = async (body: UpdateUserBody, id: number) => {
+export const updateUserService = async (
+  body: UpdateUserBody,
+  id: number,
+  profilePicture?: Express.Multer.File
+) => {
   try {
     const { email } = body;
 
-    // Find the existing voucher by ID
     const existingUser = await prisma.user.findUnique({
       where: { id },
     });
@@ -29,19 +34,30 @@ export const updateUserService = async (body: UpdateUserBody, id: number) => {
         where: { email },
       });
 
-      if (existingEmail) {
-        throw new Error("Email already exist");
+      if (existingEmail && existingEmail.id !== id) {
+        throw new Error("Email already exists");
       }
     }
 
-    // Update the voucher
-    return await prisma.user.update({
+    let secure_url = existingUser.profilePicture;
+
+    if (profilePicture) {
+      secure_url = (await cloudinaryUpload(profilePicture)).secure_url;
+    }
+
+    const updatedUser = await prisma.user.update({
       where: { id },
       data: {
         ...body,
+        profilePicture: secure_url,
       },
     });
+
+    return updatedUser;
   } catch (error) {
-    throw error;
+    console.error("Error updating user:", error);
+    throw new Error(
+      error instanceof Error ? error.message : "Unexpected error"
+    );
   }
 };
