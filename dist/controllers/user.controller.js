@@ -9,9 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserController = exports.checkReferralController = void 0;
+exports.getUserController = exports.updateUserController = exports.checkReferralController = void 0;
 const check_referral_service_1 = require("../services/user/check-referral.service");
 const update_user_service_1 = require("../services/user/update-user.service");
+const get_user_service_1 = require("../services/user/get-user.service");
 const checkReferralController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const query = req.query.referralCode;
@@ -24,9 +25,13 @@ const checkReferralController = (req, res, next) => __awaiter(void 0, void 0, vo
 });
 exports.checkReferralController = checkReferralController;
 const updateUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const { id } = req.params;
     try {
-        const { id } = req.params;
-        const result = yield (0, update_user_service_1.updateUserService)(req.body, parseInt(id));
+        const files = req.files;
+        // Check if profilePicture is present and handle the update
+        const profilePicture = (_a = files === null || files === void 0 ? void 0 : files.profilePicture) === null || _a === void 0 ? void 0 : _a[0]; // File validation already happens in the validator
+        const result = yield (0, update_user_service_1.updateUserService)(req.body, Number(id), profilePicture);
         res.status(200).send(result);
     }
     catch (error) {
@@ -34,3 +39,14 @@ const updateUserController = (req, res, next) => __awaiter(void 0, void 0, void 
     }
 });
 exports.updateUserController = updateUserController;
+const getUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const result = yield (0, get_user_service_1.getUserService)(parseInt(id));
+        res.status(200).send(result);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getUserController = getUserController;
