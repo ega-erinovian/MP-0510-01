@@ -15,7 +15,9 @@ const getEventsService = (query) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const { page = 1, sortBy = "id", sortOrder = "desc", take, search, categoryId, userId, timeRange, } = query;
         const parsedCategoryId = categoryId && Number(categoryId);
-        const whereClause = {};
+        const whereClause = {
+            isDeleted: false,
+        };
         if (parsedCategoryId) {
             whereClause.categoryId = parsedCategoryId; // Use parsed value
         }

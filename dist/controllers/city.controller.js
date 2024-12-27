@@ -14,7 +14,10 @@ const get_cities_service_1 = require("../services/city/get-cities.service");
 const get_cities_by_country_service_1 = require("../services/city/get-cities-by-country.service");
 const getCitiesController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, get_cities_service_1.getCitiesService)();
+        const query = {
+            countryId: parseInt(req.query.countryId) || 0,
+        };
+        const result = yield (0, get_cities_service_1.getCitiesService)(query);
         res.status(200).send(result);
     }
     catch (error) {

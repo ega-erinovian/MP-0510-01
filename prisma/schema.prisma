@@ -63,7 +63,7 @@ model Referral {
 model Event {
   id             Int           @id @default(autoincrement())
   title          String
-  description    String
+  description    String        @db.Text()
   price          Int
   availableSeats Int
   startDate      DateTime

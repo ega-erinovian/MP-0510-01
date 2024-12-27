@@ -9,34 +9,41 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCountriesService = void 0;
+exports.getEventService = void 0;
 const prisma_1 = require("../../lib/prisma");
-const getCountriesService = (query) => __awaiter(void 0, void 0, void 0, function* () {
+const getEventService = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { cityId } = query;
-        const whereClause = {};
-        if (cityId) {
-            whereClause.cities = {
-                some: {
-                    id: cityId,
-                },
-            };
-        }
-        const countries = prisma_1.prisma.country.findMany({
-            where: whereClause,
+        const event = yield prisma_1.prisma.event.findUnique({
+            where: { id },
             include: {
-                cities: {
+                city: {
                     select: {
                         id: true,
                         name: true,
                     },
                 },
+                category: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
+                organizer: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                        email: true,
+                    },
+                },
             },
         });
-        return countries;
+        if (!event) {
+            throw new Error("Event not found");
+        }
+        return event;
     }
     catch (error) {
         throw error;
     }
 });
-exports.getCountriesService = getCountriesService;
+exports.getEventService = getEventService;

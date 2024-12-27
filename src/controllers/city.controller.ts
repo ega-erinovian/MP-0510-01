@@ -9,7 +9,10 @@ export const getCitiesController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await getCitiesService();
+    const query = {
+      countryId: parseInt(req.query.countryId as string) || 0,
+    };
+    const result = await getCitiesService(query);
     res.status(200).send(result);
   } catch (error) {
     next(error);
