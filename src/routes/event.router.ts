@@ -7,6 +7,7 @@ import {
 } from "../controllers/event.controller";
 import { uploader } from "../lib/multer";
 import { fileFilter } from "../lib/fileFilter";
+import { verifyToken } from "../lib/jwt";
 
 const router = Router();
 
@@ -14,6 +15,7 @@ router.get("/", getEventsController);
 router.get("/:id", getEventController);
 router.patch(
   "/:id",
+  verifyToken,
   uploader().fields([{ name: "thumbnail", maxCount: 1 }]),
   fileFilter,
   updateEventController
