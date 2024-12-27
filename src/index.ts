@@ -13,6 +13,7 @@ import attendeeRouter from "./routes/attendee.router";
 import userRouter from "./routes/user.router";
 import authRouter from "./routes/auth.router";
 import couponRouter from "./routes/coupon.router";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
