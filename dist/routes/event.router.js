@@ -2,6 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const event_controller_1 = require("../controllers/event.controller");
+const multer_1 = require("../lib/multer");
+const fileFilter_1 = require("../lib/fileFilter");
 const router = (0, express_1.Router)();
 router.get("/", event_controller_1.getEventsController);
+router.get("/:id", event_controller_1.getEventController);
+router.patch("/:id", (0, multer_1.uploader)().fields([{ name: "thumbnail", maxCount: 1 }]), fileFilter_1.fileFilter, event_controller_1.updateEventController);
+router.delete("/:id", event_controller_1.deleteEventController);
 exports.default = router;

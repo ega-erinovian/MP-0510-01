@@ -8,7 +8,11 @@ export const getCountriesController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await getCountriesService();
+    const query = {
+      cityId: parseInt(req.query.cityId as string) || 0,
+    };
+
+    const result = await getCountriesService(query);
     res.status(200).send(result);
   } catch (error) {
     next(error);

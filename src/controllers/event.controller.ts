@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { getEventsService } from "../services/event/get-events.service";
 import { deleteEventService } from "../services/event/delete-event.service";
+import { getEventService } from "../services/event/get-event.service";
+import { getEventsService } from "../services/event/get-events.service";
+import { updateEventService } from "../services/event/update-event.service";
 
 export const getEventsController = async (
   req: Request,
@@ -19,6 +21,39 @@ export const getEventsController = async (
     };
 
     const result = await getEventsService(query);
+    res.status(200).send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getEventController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const result = await getEventService(parseInt(id));
+    res.status(200).send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateEventController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  try {
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+    const thumbnail = files?.thumbnail?.[0];
+
+    const result = await updateEventService(req.body, Number(id), thumbnail);
     res.status(200).send(result);
   } catch (error) {
     next(error);

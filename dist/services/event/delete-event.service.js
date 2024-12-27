@@ -9,18 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCountriesController = void 0;
-const get_countries_service_1 = require("../services/country/get-countries.service");
-const getCountriesController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.deleteEventService = void 0;
+const prisma_1 = require("../../lib/prisma");
+const deleteEventService = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const query = {
-            cityId: parseInt(req.query.cityId) || 0,
-        };
-        const result = yield (0, get_countries_service_1.getCountriesService)(query);
-        res.status(200).send(result);
+        const event = yield prisma_1.prisma.event.findFirst({
+            where: { id },
+        });
+        if (!event) {
+            throw new Error("Event not found.");
+        }
+        yield prisma_1.prisma.event.update({
+            where: { id },
+            data: { isDeleted: true },
+        });
+        return { message: "Event deleted successfully." };
     }
     catch (error) {
-        next(error);
+        throw error;
     }
 });
-exports.getCountriesController = getCountriesController;
+exports.deleteEventService = deleteEventService;

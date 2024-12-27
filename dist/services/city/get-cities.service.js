@@ -11,9 +11,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCitiesService = void 0;
 const prisma_1 = require("../../lib/prisma");
-const getCitiesService = () => __awaiter(void 0, void 0, void 0, function* () {
+const getCitiesService = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { countryId } = query;
+        const whereClause = {};
+        if (countryId) {
+            whereClause.countryId = countryId;
+        }
         const cities = prisma_1.prisma.city.findMany({
+            where: whereClause,
             include: {
                 country: {
                     select: {
