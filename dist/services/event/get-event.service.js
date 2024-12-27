@@ -18,8 +18,8 @@ const getEventService = (id) => __awaiter(void 0, void 0, void 0, function* () {
             include: {
                 city: {
                     select: {
-                        id: true,
                         name: true,
+                        countryId: true,
                     },
                 },
                 category: {

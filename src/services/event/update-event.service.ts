@@ -32,16 +32,25 @@ export const updateEventService = async (
       secure_url = (await cloudinaryUpload(thumbnnail)).secure_url;
     }
 
+    const updatedData: Partial<UpdateEventBody> & { thumbnnail?: string } = {
+      ...(body.title !== undefined && { title: body.title }),
+      ...(body.description !== undefined && { description: body.description }),
+      ...(body.price !== undefined && { price: Number(body.price) }),
+      ...(body.availableSeats !== undefined && {
+        availableSeats: Number(body.availableSeats),
+      }),
+      ...(body.startDate !== undefined && { startDate: body.startDate }),
+      ...(body.endDate !== undefined && { endDate: body.endDate }),
+      ...(body.categoryId !== undefined && {
+        categoryId: Number(body.categoryId),
+      }),
+      ...(body.cityId !== undefined && { cityId: Number(body.cityId) }),
+      thumbnnail: secure_url,
+    };
+
     const updatedEvent = await prisma.event.update({
       where: { id },
-      data: {
-        ...body,
-        price: Number(body.price),
-        availableSeats: Number(body.availableSeats),
-        categoryId: Number(body.categoryId),
-        cityId: Number(body.cityId),
-        thumbnnail: secure_url,
-      },
+      data: updatedData,
     });
 
     return updatedEvent;

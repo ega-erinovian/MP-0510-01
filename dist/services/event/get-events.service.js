@@ -70,8 +70,8 @@ const getEventsService = (query) => __awaiter(void 0, void 0, void 0, function* 
                 },
                 city: {
                     select: {
-                        id: true,
                         name: true,
+                        countryId: true,
                     },
                 },
                 category: {

@@ -102,8 +102,8 @@ export const getEventsService = async (query: GetEventQuery) => {
         },
         city: {
           select: {
-            id: true,
             name: true,
+            countryId: true,
           },
         },
         category: {
