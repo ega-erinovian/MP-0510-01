@@ -7,8 +7,8 @@ export const getEventService = async (id: number) => {
       include: {
         city: {
           select: {
-            id: true,
             name: true,
+            countryId: true,
           },
         },
         category: {

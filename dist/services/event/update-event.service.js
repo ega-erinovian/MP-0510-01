@@ -24,9 +24,14 @@ const updateEventService = (body, id, thumbnnail) => __awaiter(void 0, void 0, v
         if (thumbnnail) {
             secure_url = (yield (0, cloudinary_1.cloudinaryUpload)(thumbnnail)).secure_url;
         }
+        const updatedData = Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, (body.title !== undefined && { title: body.title })), (body.description !== undefined && { description: body.description })), (body.price !== undefined && { price: Number(body.price) })), (body.availableSeats !== undefined && {
+            availableSeats: Number(body.availableSeats),
+        })), (body.startDate !== undefined && { startDate: body.startDate })), (body.endDate !== undefined && { endDate: body.endDate })), (body.categoryId !== undefined && {
+            categoryId: Number(body.categoryId),
+        })), (body.cityId !== undefined && { cityId: Number(body.cityId) })), { thumbnnail: secure_url });
         const updatedEvent = yield prisma_1.prisma.event.update({
             where: { id },
-            data: Object.assign(Object.assign({}, body), { price: Number(body.price), availableSeats: Number(body.availableSeats), categoryId: Number(body.categoryId), cityId: Number(body.cityId), thumbnnail: secure_url }),
+            data: updatedData,
         });
         return updatedEvent;
     }
