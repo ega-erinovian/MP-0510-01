@@ -69,6 +69,7 @@ model Event {
   startDate      DateTime
   endDate        DateTime
   thumbnnail     String
+  address        String?
   isDeleted      Boolean       @default(false)
   userId         Int
   organizer      User          @relation(fields: [userId], references: [id])
