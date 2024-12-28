@@ -4,6 +4,7 @@ import { prisma } from "../../lib/prisma";
 interface UpdateEventBody {
   title?: string;
   description?: string;
+  address?: string;
   price?: number;
   availableSeats?: number;
   startDate?: Date;
@@ -35,6 +36,7 @@ export const updateEventService = async (
     const updatedData: Partial<UpdateEventBody> & { thumbnnail?: string } = {
       ...(body.title !== undefined && { title: body.title }),
       ...(body.description !== undefined && { description: body.description }),
+      ...(body.description !== undefined && { address: body.address }),
       ...(body.price !== undefined && { price: Number(body.price) }),
       ...(body.availableSeats !== undefined && {
         availableSeats: Number(body.availableSeats),
