@@ -1,7 +1,7 @@
 import { User } from "@prisma/client";
 import { cloudinaryUpload } from "../../lib/cloudinary";
 import { prisma } from "../../lib/prisma";
-import { Express } from "express"; // Make sure Express types are included
+import { Express } from "express";
 
 interface UpdateUserBody {
   fullName?: string;
@@ -17,10 +17,8 @@ export const updateUserService = async (
   body: UpdateUserBody,
   id: number,
   profilePicture?: Express.Multer.File
-) => {
+): Promise<User> => {
   try {
-    const { email } = body;
-
     const existingUser = await prisma.user.findUnique({
       where: { id },
     });
@@ -29,9 +27,9 @@ export const updateUserService = async (
       throw new Error("User not found");
     }
 
-    if (email) {
+    if (body.email) {
       const existingEmail = await prisma.user.findFirst({
-        where: { email },
+        where: { email: body.email },
       });
 
       if (existingEmail && existingEmail.id !== id) {
@@ -40,17 +38,30 @@ export const updateUserService = async (
     }
 
     let secure_url = existingUser.profilePicture;
-
     if (profilePicture) {
       secure_url = (await cloudinaryUpload(profilePicture)).secure_url;
     }
 
+    const updateData: Partial<User> = {};
+
+    if (body.fullName) updateData.fullName = body.fullName;
+    if (body.email) updateData.email = body.email;
+    if (body.password) updateData.password = body.password;
+    if (body.phoneNumber) updateData.phoneNumber = body.phoneNumber;
+    if (body.cityId !== undefined && !isNaN(body.cityId)) {
+      updateData.cityId = Number(body.cityId);
+    }
+    if (body.point !== undefined && !isNaN(body.point)) {
+      updateData.point = Number(body.point);
+    }
+    if (body.pointExpired) {
+      updateData.pointExpired = body.pointExpired;
+    }
+    updateData.profilePicture = secure_url;
+
     const updatedUser = await prisma.user.update({
       where: { id },
-      data: {
-        ...body,
-        profilePicture: secure_url,
-      },
+      data: updateData,
     });
 
     return updatedUser;

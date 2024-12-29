@@ -14,7 +14,9 @@ export const getVouchersService = async (query: GetVouchersQuery) => {
 
     const parsedEventId = eventId && Number(eventId);
 
-    const whereClause: Prisma.VoucherWhereInput = {};
+    const whereClause: Prisma.VoucherWhereInput = {
+      isUsed: false,
+    };
 
     if (parsedEventId) {
       whereClause.eventId = parsedEventId; // Use parsed value

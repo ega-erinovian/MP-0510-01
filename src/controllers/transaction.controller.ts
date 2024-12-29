@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { getTransactionsService } from "../services/transactions/get-transactions.service";
 import { deleteTransactionService } from "../services/transactions/delete-transaction.service";
-import { updateTransactionService } from "../services/transactions/update-transaction.service";
-import { getTransactionQuantityService } from "../services/transactions/get-transactions-qty.service";
-import { log } from "console";
-import { getTransactionIncomeService } from "../services/transactions/get-transactions-income.service";
 import { getTransactionIncomePerMonthService } from "../services/transactions/get-transactions-income-per-month.service";
+import { getTransactionIncomeService } from "../services/transactions/get-transactions-income.service";
+import { getTransactionQuantityService } from "../services/transactions/get-transactions-qty.service";
+import { getTransactionsService } from "../services/transactions/get-transactions.service";
+import { updateTransactionService } from "../services/transactions/update-transaction.service";
+import { createTransactionService } from "../services/transactions/create-transaction.service";
+import { prisma } from "../lib/prisma";
 
 export const getTransactionsController = async (
   req: Request,
@@ -22,6 +23,7 @@ export const getTransactionsController = async (
       status: (req.query.status as string) || "",
       eventId: parseInt(req.query.eventId as string) || 0,
       userId: parseInt(req.query.userId as string) || 0,
+      customerId: parseInt(req.query.customerId as string) || 0,
     };
 
     const result = await getTransactionsService(query);
@@ -90,14 +92,39 @@ export const getTransactionsIncomePerMonthController = async (
   }
 };
 
-export const updateTransactionController = async (
+export const createTransactionController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
-    const result = await updateTransactionService(req.body, parseInt(id));
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+    const paymentProof = files?.paymentProof?.[0];
+
+    const result = await createTransactionService(req.body, paymentProof);
+
+    res.status(200).send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateTransactionController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  try {
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+    const paymentProof = files?.paymentProof?.[0];
+
+    const result = await updateTransactionService(
+      req.body,
+      parseInt(id),
+      paymentProof
+    );
     res.status(200).send(result);
   } catch (error) {
     next(error);
@@ -114,6 +141,39 @@ export const deleteTransactionController = async (
     //   const userId = Number(res.locals.user.id); // Mengambil id dari token milik user
     const result = await deleteTransactionService(id /*userId*/);
     res.status(200).send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getRemainingTimeController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      res.status(400).send({ error: "Transaction ID is required" });
+      return;
+    }
+
+    const transaction = await prisma.transaction.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!transaction) {
+      res.status(404).send({ error: "Transaction not found" });
+      return;
+    }
+
+    const expiryTime = new Date(
+      transaction.createdAt.getTime() + 2 * 60 * 60 * 1000
+    ); // 2 hours
+    const timeLeft = Math.max(0, expiryTime.getTime() - Date.now());
+
+    res.status(200).send({ timeLeft });
   } catch (error) {
     next(error);
   }
