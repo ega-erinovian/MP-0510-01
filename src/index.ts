@@ -1,19 +1,19 @@
+import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { PORT } from "./config";
-import cors from "cors";
-import eventRouter from "./routes/event.router";
+import attendeeRouter from "./routes/attendee.router";
+import authRouter from "./routes/auth.router";
+import categoryRouter from "./routes/category.router";
 import cityRouter from "./routes/city.router";
 import countryRouter from "./routes/country.router";
-import voucherRouter from "./routes/voucher.router";
-import categoryRouter from "./routes/category.router";
-import transactionRouter from "./routes/transaction.router";
+import couponRouter from "./routes/coupon.router";
+import eventRouter from "./routes/event.router";
 import referralRouter from "./routes/referral.router";
 import reviewRouter from "./routes/review.router";
-import attendeeRouter from "./routes/attendee.router";
+import transactionRouter from "./routes/transaction.router";
 import userRouter from "./routes/user.router";
-import authRouter from "./routes/auth.router";
-import couponRouter from "./routes/coupon.router";
-import cookieParser from "cookie-parser";
+import voucherRouter from "./routes/voucher.router";
+import "./jobs/transactionCron";
 
 const app = express();
 

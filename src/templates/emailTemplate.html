@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ticket Status Update</title>
+  </head>
+  <body
+    style="
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    ">
+    <div
+      style="
+        background-color: #f4f4f4;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      ">
+      <h1 style="color: #2c3e50; margin: 0">Ticket Status Update</h1>
+    </div>
+
+    <p style="font-size: 16px">Dear {{recipientName}},</p>
+
+    <p style="font-size: 16px">
+      Your ticket status for <strong>{{eventTitle}}</strong> has been updated to
+      <strong>{{status}}</strong>.
+    </p>
+
+    <div
+      style="
+        background-color: #e8f5e9;
+        padding: 20px;
+        border-radius: 5px;
+        margin: 20px 0;
+      ">
+      <h2 style="color: #2e7d32; margin-top: 0">Event Details</h2>
+      <p style="margin: 5px 0"><strong>Date:</strong> {{eventDate}}</p>
+      <p style="margin: 5px 0"><strong>Time:</strong> {{eventTime}}</p>
+      <p style="margin: 5px 0"><strong>Venue:</strong> {{eventVenue}}</p>
+      <p style="margin: 5px 0"><strong>Ticket ID:</strong> {{ticketId}}</p>
+      <p style="margin: 5px 0"><strong>Total Paid:</strong> {{totalPaid}}</p>
+    </div>
+
+    {{ifDone}} {{ifRejected}}
+
+    <p style="font-size: 16px">
+      If you have any questions or need to make changes to your order, please
+      don't hesitate to contact our customer support team.
+    </p>
+
+    <p style="font-size: 16px">We hope you enjoy the event!</p>
+
+    <div
+      style="
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #ddd;
+        font-size: 14px;
+        color: #666;
+      ">
+      <p>
+        This is an automated email. Please do not reply directly to this
+        message.
+      </p>
+    </div>
+  </body>
+</html>

@@ -27,8 +27,7 @@ export const updateUserController = async (
   try {
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
-    // Check if profilePicture is present and handle the update
-    const profilePicture = files?.profilePicture?.[0]; // File validation already happens in the validator
+    const profilePicture = files?.profilePicture?.[0];
 
     const result = await updateUserService(
       req.body,
