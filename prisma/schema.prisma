@@ -166,7 +166,7 @@ model Voucher {
   event        Event        @relation(fields: [eventId], references: [id])
   code         String       @unique
   amount       Int
-  isUsed       Boolean      @default(false)
+  isUsed       PromoStatus  @default(AVAILABLE)
   expiresAt    DateTime
   transactions Transaction?
 
@@ -182,7 +182,7 @@ model Coupon {
   userId       Int
   user         User         @relation(fields: [userId], references: [id])
   amount       Int
-  isUsed       Boolean      @default(false)
+  isUsed       PromoStatus  @default(AVAILABLE)
   expiresAt    DateTime
   transactions Transaction?
 
@@ -190,6 +190,12 @@ model Coupon {
   updatedAt DateTime @updatedAt
 
   @@map("coupons")
+}
+
+enum PromoStatus {
+  AVAILABLE
+  USED
+  EXPIRED
 }
 
 model Notification {

@@ -29,15 +29,12 @@ export const validateCreateVoucher = [
 ];
 
 export const validateUpdateVoucher = [
-  body("eventId").optional(),
   body("code")
     .optional()
     .isString()
     .isLength({ min: 4 })
     .withMessage("Code must be at least 4 characters long"),
   body("amount").optional().isNumeric().withMessage("Amount must be a number"),
-  body("expiresAt").optional(),
-  body("isUsed").optional(),
 
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);

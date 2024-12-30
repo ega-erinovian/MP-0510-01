@@ -11,6 +11,7 @@ export const getCitiesController = async (
   try {
     const query = {
       countryId: parseInt(req.query.countryId as string) || 0,
+      search: (req.query.search as string) || "",
     };
     const result = await getCitiesService(query);
     res.status(200).send(result);

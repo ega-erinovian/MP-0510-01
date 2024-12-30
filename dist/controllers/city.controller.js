@@ -16,6 +16,7 @@ const getCitiesController = (req, res, next) => __awaiter(void 0, void 0, void 0
     try {
         const query = {
             countryId: parseInt(req.query.countryId) || 0,
+            search: req.query.search || "",
         };
         const result = yield (0, get_cities_service_1.getCitiesService)(query);
         res.status(200).send(result);

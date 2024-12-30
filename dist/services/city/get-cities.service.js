@@ -13,10 +13,13 @@ exports.getCitiesService = void 0;
 const prisma_1 = require("../../lib/prisma");
 const getCitiesService = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { countryId } = query;
+        const { countryId, search } = query;
         const whereClause = {};
         if (countryId) {
             whereClause.countryId = countryId;
+        }
+        if (search) {
+            whereClause.OR = [{ name: { contains: search, mode: "insensitive" } }];
         }
         const cities = prisma_1.prisma.city.findMany({
             where: whereClause,

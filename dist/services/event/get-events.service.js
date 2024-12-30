@@ -13,7 +13,7 @@ exports.getEventsService = void 0;
 const prisma_1 = require("../../lib/prisma");
 const getEventsService = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { page = 1, sortBy = "id", sortOrder = "desc", take, search, categoryId, userId, timeRange, } = query;
+        const { page = 1, sortBy = "id", sortOrder = "desc", take, search, categoryId, userId, cityId, timeRange, } = query;
         const parsedCategoryId = categoryId && Number(categoryId);
         const whereClause = {
             isDeleted: false,
@@ -21,11 +21,17 @@ const getEventsService = (query) => __awaiter(void 0, void 0, void 0, function* 
         if (parsedCategoryId) {
             whereClause.categoryId = parsedCategoryId; // Use parsed value
         }
+        if (cityId) {
+            whereClause.cityId = cityId;
+        }
         if (userId) {
             whereClause.userId = userId;
         }
         if (search) {
-            whereClause.OR = [{ title: { contains: search, mode: "insensitive" } }];
+            whereClause.OR = [
+                { title: { contains: search, mode: "insensitive" } },
+                { organizer: { fullName: { contains: search } } },
+            ];
         }
         if (timeRange) {
             const now = new Date();
@@ -66,6 +72,7 @@ const getEventsService = (query) => __awaiter(void 0, void 0, void 0, function* 
                     select: {
                         id: true,
                         fullName: true,
+                        profilePicture: true,
                     },
                 },
                 city: {

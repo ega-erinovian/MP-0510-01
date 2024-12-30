@@ -13,15 +13,16 @@ exports.getCouponsService = void 0;
 const prisma_1 = require("../../lib/prisma");
 const getCouponsService = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { userId, search } = query;
-        const whereClause = {
-            isUsed: false,
-        };
+        const { userId, search, isUsed } = query;
+        const whereClause = {};
         if (userId) {
             whereClause.userId = userId;
         }
+        if (isUsed) {
+            whereClause.isUsed = isUsed;
+        }
         if (search) {
-            whereClause.OR = [{ code: { contains: search } }];
+            whereClause.OR = [{ code: { equals: search } }];
         }
         const coupons = yield prisma_1.prisma.coupon.findMany({
             where: whereClause,

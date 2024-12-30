@@ -13,17 +13,18 @@ exports.getVouchersService = void 0;
 const prisma_1 = require("../../lib/prisma");
 const getVouchersService = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { page, sortBy, sortOrder, take, search, eventId, userId } = query;
+        const { page, sortBy, sortOrder, take, search, eventId, userId, isUsed } = query;
         const parsedEventId = eventId && Number(eventId);
-        const whereClause = {
-            isUsed: false,
-        };
+        const whereClause = {};
         if (parsedEventId) {
             whereClause.eventId = parsedEventId; // Use parsed value
         }
+        if (isUsed) {
+            whereClause.isUsed = isUsed;
+        }
         if (search) {
             whereClause.OR = [
-                { code: { contains: search } },
+                { code: { equals: search } },
                 { event: { title: { contains: search } } },
             ];
         }
