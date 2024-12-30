@@ -4,5 +4,6 @@ const express_1 = require("express");
 const coupon_controller_1 = require("../controllers/coupon.controller");
 const coupon_validator_1 = require("../validators/coupon.validator");
 const router = (0, express_1.Router)();
+router.get("/", coupon_controller_1.getCouponsController);
 router.post("/", coupon_validator_1.validateCreateCoupon, coupon_controller_1.createCouponController);
 exports.default = router;

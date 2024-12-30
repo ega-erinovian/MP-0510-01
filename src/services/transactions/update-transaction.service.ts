@@ -103,7 +103,7 @@ export const updateTransactionService = async (
       // Additional steps for rejected transactions
       if (body.status === Status.REJECTED) {
         await transporter.sendMail({
-          to: "support@youreventcompany.com",
+          to: body.email,
           subject: `Rejected Transaction Alert - ID: ${id}`,
           html: `
             <p>A transaction has been rejected:</p>
