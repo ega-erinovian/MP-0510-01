@@ -9,11 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEventController = exports.updateEventController = exports.getEventController = exports.getEventsController = void 0;
+exports.deleteEventController = exports.updateEventController = exports.createEventController = exports.getEventController = exports.getEventsController = void 0;
 const delete_event_service_1 = require("../services/event/delete-event.service");
 const get_event_service_1 = require("../services/event/get-event.service");
 const get_events_service_1 = require("../services/event/get-events.service");
 const update_event_service_1 = require("../services/event/update-event.service");
+const create_event_service_1 = require("../services/event/create-event.service");
 const getEventsController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const query = {
@@ -44,12 +45,25 @@ const getEventController = (req, res, next) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.getEventController = getEventController;
+const createEventController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const files = req.files;
+        const thumbnail = (_a = files === null || files === void 0 ? void 0 : files.thumbnnail) === null || _a === void 0 ? void 0 : _a[0];
+        const result = yield (0, create_event_service_1.createEventService)(req.body, thumbnail);
+        res.status(200).send(result);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.createEventController = createEventController;
 const updateEventController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const { id } = req.params;
     try {
         const files = req.files;
-        const thumbnail = (_a = files === null || files === void 0 ? void 0 : files.thumbnail) === null || _a === void 0 ? void 0 : _a[0];
+        const thumbnail = (_a = files === null || files === void 0 ? void 0 : files.thumbnnail) === null || _a === void 0 ? void 0 : _a[0];
         const result = yield (0, update_event_service_1.updateEventService)(req.body, Number(id), thumbnail);
         res.status(200).send(result);
     }

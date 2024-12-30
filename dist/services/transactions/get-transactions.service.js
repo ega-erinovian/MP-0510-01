@@ -13,7 +13,7 @@ exports.getTransactionsService = void 0;
 const prisma_1 = require("../../lib/prisma");
 const getTransactionsService = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { page, sortBy, sortOrder, take, search, status, eventId, userId } = query;
+        const { page, sortBy, sortOrder, take, search, status, eventId, userId, customerId, } = query;
         const whereClause = {
             isDeleted: false,
         };
@@ -34,6 +34,9 @@ const getTransactionsService = (query) => __awaiter(void 0, void 0, void 0, func
                 userId: userId,
             };
         }
+        if (customerId) {
+            whereClause.userId = customerId;
+        }
         const transactions = yield prisma_1.prisma.transaction.findMany({
             where: whereClause,
             orderBy: {
@@ -51,6 +54,12 @@ const getTransactionsService = (query) => __awaiter(void 0, void 0, void 0, func
                     select: {
                         title: true,
                         price: true,
+                        address: true,
+                        city: {
+                            select: {
+                                name: true,
+                            },
+                        },
                         availableSeats: true,
                         userId: true,
                     },

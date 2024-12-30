@@ -29,8 +29,7 @@ const updateUserController = (req, res, next) => __awaiter(void 0, void 0, void 
     const { id } = req.params;
     try {
         const files = req.files;
-        // Check if profilePicture is present and handle the update
-        const profilePicture = (_a = files === null || files === void 0 ? void 0 : files.profilePicture) === null || _a === void 0 ? void 0 : _a[0]; // File validation already happens in the validator
+        const profilePicture = (_a = files === null || files === void 0 ? void 0 : files.profilePicture) === null || _a === void 0 ? void 0 : _a[0];
         const result = yield (0, update_user_service_1.updateUserService)(req.body, Number(id), profilePicture);
         res.status(200).send(result);
     }
