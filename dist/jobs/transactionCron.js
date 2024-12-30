@@ -65,3 +65,85 @@ node_cron_1.default.schedule("* * * * *", () => __awaiter(void 0, void 0, void 0
         console.error("Error processing transactions:", error);
     }
 }));
+node_cron_1.default.schedule("* * * * *", () => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Running cron job to check voucher expiries");
+    try {
+        const availableVoucher = yield prisma_1.prisma.voucher.findMany({
+            where: {
+                isUsed: "AVAILABLE",
+                expiresAt: {
+                    equals: new Date(),
+                },
+            },
+        });
+        // Update each voucher to EXPIRED
+        for (const voucher of availableVoucher) {
+            yield prisma_1.prisma.voucher.update({
+                where: { id: voucher.id },
+                data: { isUsed: "EXPIRED" },
+            });
+            console.log(`Voucher ${voucher.id} updated to EXPIRED.`);
+        }
+        console.log(`Total expired vouchers: ${availableVoucher.length}`);
+    }
+    catch (error) {
+        console.error("Error processing vouchers:", error);
+    }
+}));
+node_cron_1.default.schedule("* * * * *", () => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Running cron job to check coupon expiries");
+    try {
+        const availableCoupon = yield prisma_1.prisma.coupon.findMany({
+            where: {
+                isUsed: "AVAILABLE",
+                expiresAt: {
+                    equals: new Date(),
+                },
+            },
+        });
+        // Update each voucher to EXPIRED
+        for (const coupon of availableCoupon) {
+            yield prisma_1.prisma.coupon.update({
+                where: { id: coupon.id },
+                data: { isUsed: "EXPIRED" },
+            });
+            console.log(`Coupon ${coupon.id} updated to EXPIRED.`);
+        }
+        console.log(`Total expired coupons: ${availableCoupon.length}`);
+    }
+    catch (error) {
+        console.error("Error processing coupons:", error);
+    }
+}));
+node_cron_1.default.schedule("* * * * *", () => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Running cron job to check user's point expiries");
+    try {
+        // Calculate date 3 months ago
+        const threeMonthsAgo = new Date();
+        threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+        // Set to beginning of the day for more precise comparison
+        threeMonthsAgo.setHours(0, 0, 0, 0);
+        const existingUser = yield prisma_1.prisma.user.findMany({
+            where: {
+                isDeleted: false,
+                point: {
+                    lte: 0,
+                },
+                pointExpired: {
+                    lte: threeMonthsAgo, // Less than or equal to 3 months ago
+                },
+            },
+        });
+        // Update each voucher to EXPIRED
+        for (const user of existingUser) {
+            yield prisma_1.prisma.user.update({
+                where: { id: user.id },
+                data: { point: 0 },
+            });
+            console.log(`User's ${user.id} point updated to 0 because it's expired.`);
+        }
+    }
+    catch (error) {
+        console.error("Error processing coupons:", error);
+    }
+}));

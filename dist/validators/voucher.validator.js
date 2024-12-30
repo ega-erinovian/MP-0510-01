@@ -26,15 +26,12 @@ exports.validateCreateVoucher = [
     },
 ];
 exports.validateUpdateVoucher = [
-    (0, express_validator_1.body)("eventId").optional(),
     (0, express_validator_1.body)("code")
         .optional()
         .isString()
         .isLength({ min: 4 })
         .withMessage("Code must be at least 4 characters long"),
     (0, express_validator_1.body)("amount").optional().isNumeric().withMessage("Amount must be a number"),
-    (0, express_validator_1.body)("expiresAt").optional(),
-    (0, express_validator_1.body)("isUsed").optional(),
     (req, res, next) => {
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {

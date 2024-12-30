@@ -1,3 +1,4 @@
+import { PromoStatus } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
 interface UpdateVoucherBody {
@@ -5,7 +6,7 @@ interface UpdateVoucherBody {
   code?: string;
   amount?: number;
   expiresAt?: Date;
-  isUsed?: boolean;
+  isUsed?: PromoStatus;
 }
 
 export const updateVoucherService = async (

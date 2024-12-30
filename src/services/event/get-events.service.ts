@@ -6,6 +6,7 @@ interface GetEventQuery extends PaginationQueryParams {
   search?: string;
   userId?: number;
   categoryId?: number;
+  cityId?: number;
   timeRange?: string;
 }
 
@@ -19,6 +20,7 @@ export const getEventsService = async (query: GetEventQuery) => {
       search,
       categoryId,
       userId,
+      cityId,
       timeRange,
     } = query;
 
@@ -32,12 +34,19 @@ export const getEventsService = async (query: GetEventQuery) => {
       whereClause.categoryId = parsedCategoryId; // Use parsed value
     }
 
+    if (cityId) {
+      whereClause.cityId = cityId;
+    }
+
     if (userId) {
       whereClause.userId = userId;
     }
 
     if (search) {
-      whereClause.OR = [{ title: { contains: search, mode: "insensitive" } }];
+      whereClause.OR = [
+        { title: { contains: search, mode: "insensitive" } },
+        { organizer: { fullName: { contains: search } } },
+      ];
     }
 
     if (timeRange) {
@@ -98,6 +107,7 @@ export const getEventsService = async (query: GetEventQuery) => {
           select: {
             id: true,
             fullName: true,
+            profilePicture: true,
           },
         },
         city: {
