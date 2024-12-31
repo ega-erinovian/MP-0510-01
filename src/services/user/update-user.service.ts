@@ -2,6 +2,7 @@ import { User } from "@prisma/client";
 import { cloudinaryUpload } from "../../lib/cloudinary";
 import { prisma } from "../../lib/prisma";
 import { Express } from "express";
+import { hashPassword } from "../../lib/argon";
 
 interface UpdateUserBody {
   fullName?: string;
@@ -38,16 +39,23 @@ export const updateUserService = async (
     }
 
     let secure_url = existingUser.profilePicture;
+
     if (profilePicture) {
       secure_url = (await cloudinaryUpload(profilePicture)).secure_url;
+    }
+
+    let hashedPassword = "";
+
+    if (body.password) {
+      hashedPassword = await hashPassword(body.password);
     }
 
     const updateData: Partial<User> = {};
 
     if (body.fullName) updateData.fullName = body.fullName;
     if (body.email) updateData.email = body.email;
-    if (body.password) updateData.password = body.password;
     if (body.phoneNumber) updateData.phoneNumber = body.phoneNumber;
+    if (body.password) updateData.password = hashedPassword;
     if (body.cityId !== undefined && !isNaN(body.cityId)) {
       updateData.cityId = Number(body.cityId);
     }
