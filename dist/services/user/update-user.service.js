@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUserService = void 0;
 const cloudinary_1 = require("../../lib/cloudinary");
 const prisma_1 = require("../../lib/prisma");
+const argon_1 = require("../../lib/argon");
 const updateUserService = (body, id, profilePicture) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const existingUser = yield prisma_1.prisma.user.findUnique({
@@ -32,15 +33,19 @@ const updateUserService = (body, id, profilePicture) => __awaiter(void 0, void 0
         if (profilePicture) {
             secure_url = (yield (0, cloudinary_1.cloudinaryUpload)(profilePicture)).secure_url;
         }
+        let hashedPassword = "";
+        if (body.password) {
+            hashedPassword = yield (0, argon_1.hashPassword)(body.password);
+        }
         const updateData = {};
         if (body.fullName)
             updateData.fullName = body.fullName;
         if (body.email)
             updateData.email = body.email;
-        if (body.password)
-            updateData.password = body.password;
         if (body.phoneNumber)
             updateData.phoneNumber = body.phoneNumber;
+        if (body.password)
+            updateData.password = hashedPassword;
         if (body.cityId !== undefined && !isNaN(body.cityId)) {
             updateData.cityId = Number(body.cityId);
         }

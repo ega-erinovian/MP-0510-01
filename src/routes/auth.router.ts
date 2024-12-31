@@ -1,19 +1,20 @@
 import { Router } from "express";
 import {
   forgotPasswordController,
-  loginController,
+  checkOldPasswordController,
   registerController,
   resetPasswordController,
+  loginController,
 } from "../controllers/auth.controller";
+import { fileFilter } from "../lib/fileFilter";
+import { verifyToken, verifyTokenReset } from "../lib/jwt";
+import { uploader } from "../lib/multer";
 import {
   validateForgotPassword,
   validateLogin,
   validateRegister,
   validateResetPassword,
 } from "../validators/auth.validator";
-import { uploader } from "../lib/multer";
-import { fileFilter } from "../lib/fileFilter";
-import { verifyTokenReset } from "../lib/jwt";
 
 const router = Router();
 
@@ -29,6 +30,12 @@ router.post(
   "/forgot-password",
   validateForgotPassword,
   forgotPasswordController
+);
+router.post(
+  "/check-password",
+  verifyToken,
+  validateResetPassword,
+  checkOldPasswordController
 );
 router.patch(
   "/reset-password",

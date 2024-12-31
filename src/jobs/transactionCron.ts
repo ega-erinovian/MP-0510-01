@@ -46,7 +46,6 @@ cron.schedule("* * * * *", async () => {
       },
     });
 
-    // Update each transaction to REJECTED
     for (const transaction of unpaidTransactions) {
       await prisma.transaction.update({
         where: { id: transaction.id },
