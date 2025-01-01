@@ -10,26 +10,41 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createTransactionService = void 0;
-const prisma_1 = require("../../lib/prisma");
 const cloudinary_1 = require("../../lib/cloudinary");
+const prisma_1 = require("../../lib/prisma");
 const createTransactionService = (body, paymentProof) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
         let secure_url = null;
         if (paymentProof) {
             secure_url = (yield (0, cloudinary_1.cloudinaryUpload)(paymentProof)).secure_url;
         }
+        // Build transaction data object
+        const transactionData = {
+            status: body.status,
+            qty: Number(body.qty),
+            totalPrice: Number(body.totalPrice),
+            userId: Number(body.userId),
+            eventId: Number(body.eventId),
+            paymentProof: secure_url,
+            isUsePoint: typeof body.isUsePoint === "string"
+                ? body.isUsePoint === "true"
+                : (_a = body.isUsePoint) !== null && _a !== void 0 ? _a : false,
+        };
+        // Optional fields (voucher, coupon)
+        if (body.voucherId !== undefined) {
+            transactionData.voucherId = Number(body.voucherId);
+        }
+        if (body.couponId !== undefined) {
+            transactionData.couponId = Number(body.couponId);
+        }
+        // Create the transaction
         return yield prisma_1.prisma.transaction.create({
-            data: {
-                status: body.status,
-                qty: Number(body.qty),
-                totalPrice: Number(body.totalPrice),
-                userId: Number(body.userId),
-                eventId: Number(body.eventId),
-                paymentProof: secure_url,
-            },
+            data: transactionData,
         });
     }
     catch (error) {
+        console.error("Error creating transaction:", error);
         throw error;
     }
 });

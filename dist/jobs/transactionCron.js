@@ -52,7 +52,6 @@ node_cron_1.default.schedule("* * * * *", () => __awaiter(void 0, void 0, void 0
                 },
             },
         });
-        // Update each transaction to REJECTED
         for (const transaction of unpaidTransactions) {
             yield prisma_1.prisma.transaction.update({
                 where: { id: transaction.id },

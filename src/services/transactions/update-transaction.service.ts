@@ -12,6 +12,8 @@ interface UpdateTransactionBody {
   status?: Status;
   email?: string;
   paymentProof?: string;
+  voucherId?: number | null;
+  couponId?: number | null;
 }
 
 export const updateTransactionService = async (
@@ -61,7 +63,16 @@ export const updateTransactionService = async (
     const updateData: Partial<UpdateTransactionBody> = {};
 
     if (body.status) updateData.status = body.status;
-    updateData.paymentProof = secure_url;
+
+    if (body.voucherId !== undefined) {
+      updateData.voucherId =
+        body.voucherId === null ? null : Number(body.voucherId);
+    }
+
+    if (body.couponId !== undefined) {
+      updateData.couponId =
+        body.couponId === null ? null : Number(body.couponId);
+    }
 
     const updatedTransaction = await prisma.transaction.update({
       where: { id },

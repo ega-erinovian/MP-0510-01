@@ -54,7 +54,14 @@ const updateTransactionService = (body, id, paymentProof) => __awaiter(void 0, v
         const updateData = {};
         if (body.status)
             updateData.status = body.status;
-        updateData.paymentProof = secure_url;
+        if (body.voucherId !== undefined) {
+            updateData.voucherId =
+                body.voucherId === null ? null : Number(body.voucherId);
+        }
+        if (body.couponId !== undefined) {
+            updateData.couponId =
+                body.couponId === null ? null : Number(body.couponId);
+        }
         const updatedTransaction = yield prisma_1.prisma.transaction.update({
             where: { id },
             data: updateData,

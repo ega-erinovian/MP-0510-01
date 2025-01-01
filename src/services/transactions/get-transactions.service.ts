@@ -64,6 +64,7 @@ export const getTransactionsService = async (query: GetTransactionsQuery) => {
             fullName: true,
             email: true,
             phoneNumber: true,
+            point: true,
           },
         },
         event: {
