@@ -138,6 +138,7 @@ model Transaction {
   qty          Int
   totalPrice   Int
   paymentProof String?
+  isUsePoint   Boolean  @default(false)
   isDeleted    Boolean  @default(false)
   status       Status   @default(UNPAID)
   voucherId    Int?     @unique

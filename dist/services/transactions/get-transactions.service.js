@@ -48,6 +48,7 @@ const getTransactionsService = (query) => __awaiter(void 0, void 0, void 0, func
                         fullName: true,
                         email: true,
                         phoneNumber: true,
+                        point: true,
                     },
                 },
                 event: {
