@@ -11,6 +11,16 @@ export async function loadEmailTemplate(): Promise<string> {
   return await fs.readFile(templatePath, "utf-8");
 }
 
+export async function loadForgotPasswordEmailTemplate(): Promise<string> {
+  const templatePath = path.join(
+    process.cwd(),
+    "src",
+    "templates",
+    "forgotPasswordEmail.html"
+  );
+  return await fs.readFile(templatePath, "utf-8");
+}
+
 export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
