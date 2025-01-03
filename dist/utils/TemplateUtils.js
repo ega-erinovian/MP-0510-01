@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loadEmailTemplate = loadEmailTemplate;
+exports.loadForgotPasswordEmailTemplate = loadForgotPasswordEmailTemplate;
 exports.formatCurrency = formatCurrency;
 exports.replaceTemplateVariables = replaceTemplateVariables;
 const promises_1 = __importDefault(require("fs/promises"));
@@ -20,6 +21,12 @@ const path_1 = __importDefault(require("path"));
 function loadEmailTemplate() {
     return __awaiter(this, void 0, void 0, function* () {
         const templatePath = path_1.default.join(process.cwd(), "src", "templates", "emailTemplate.html");
+        return yield promises_1.default.readFile(templatePath, "utf-8");
+    });
+}
+function loadForgotPasswordEmailTemplate() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const templatePath = path_1.default.join(process.cwd(), "src", "templates", "forgotPasswordEmail.html");
         return yield promises_1.default.readFile(templatePath, "utf-8");
     });
 }

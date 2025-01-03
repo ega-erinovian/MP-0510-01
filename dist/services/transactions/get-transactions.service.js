@@ -63,6 +63,12 @@ const getTransactionsService = (query) => __awaiter(void 0, void 0, void 0, func
                         },
                         availableSeats: true,
                         userId: true,
+                        organizer: {
+                            select: {
+                                fullName: true,
+                                bankAccount: true,
+                            },
+                        },
                     },
                 },
             },

@@ -21,6 +21,7 @@ model User {
   password       String
   profilePicture String?
   referralCode   String?        @unique
+  bankAccount    String?
   phoneNumber    String
   role           Role
   isDeleted      Boolean        @default(false)

@@ -55,9 +55,9 @@ node_cron_1.default.schedule("* * * * *", () => __awaiter(void 0, void 0, void 0
         for (const transaction of unpaidTransactions) {
             yield prisma_1.prisma.transaction.update({
                 where: { id: transaction.id },
-                data: { status: "REJECTED" },
+                data: { status: "EXPIRED" },
             });
-            console.log(`Transaction ${transaction.id} updated to REJECTED.`);
+            console.log(`Transaction ${transaction.id} updated to EXPIRED.`);
         }
     }
     catch (error) {
@@ -117,10 +117,8 @@ node_cron_1.default.schedule("* * * * *", () => __awaiter(void 0, void 0, void 0
 node_cron_1.default.schedule("* * * * *", () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Running cron job to check user's point expiries");
     try {
-        // Calculate date 3 months ago
         const threeMonthsAgo = new Date();
         threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
-        // Set to beginning of the day for more precise comparison
         threeMonthsAgo.setHours(0, 0, 0, 0);
         const existingUser = yield prisma_1.prisma.user.findMany({
             where: {
@@ -129,11 +127,10 @@ node_cron_1.default.schedule("* * * * *", () => __awaiter(void 0, void 0, void 0
                     lte: 0,
                 },
                 pointExpired: {
-                    lte: threeMonthsAgo, // Less than or equal to 3 months ago
+                    lte: threeMonthsAgo,
                 },
             },
         });
-        // Update each voucher to EXPIRED
         for (const user of existingUser) {
             yield prisma_1.prisma.user.update({
                 where: { id: user.id },

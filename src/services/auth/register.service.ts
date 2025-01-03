@@ -18,7 +18,14 @@ export const registerService = async (
       throw new Error("Account already exist");
     }
 
-    const { secure_url } = await cloudinaryUpload(profilePicture);
+    let secure_url = "";
+
+    if (profilePicture === undefined) {
+      secure_url =
+        "https://res.cloudinary.com/dpeljv2vu/image/upload/v1734840028/blank-profile-picture-973460_640_enmtle.webp";
+    } else {
+      secure_url = (await cloudinaryUpload(profilePicture)).secure_url;
+    }
 
     const hashedPassword = await hashPassword(password);
 

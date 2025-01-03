@@ -73,6 +73,7 @@ const getEventsService = (query) => __awaiter(void 0, void 0, void 0, function* 
                         id: true,
                         fullName: true,
                         profilePicture: true,
+                        bankAccount: true,
                     },
                 },
                 city: {

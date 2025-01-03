@@ -79,6 +79,12 @@ export const getTransactionsService = async (query: GetTransactionsQuery) => {
             },
             availableSeats: true,
             userId: true,
+            organizer: {
+              select: {
+                fullName: true,
+                bankAccount: true,
+              },
+            },
           },
         },
       },

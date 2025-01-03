@@ -22,6 +22,7 @@ export const getEventService = async (id: number) => {
             id: true,
             fullName: true,
             email: true,
+            bankAccount: true,
           },
         },
       },

@@ -9,10 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserController = exports.updateUserController = exports.checkReferralController = void 0;
+exports.deleteUserController = exports.getUserController = exports.updateUserController = exports.checkReferralController = void 0;
 const check_referral_service_1 = require("../services/user/check-referral.service");
 const update_user_service_1 = require("../services/user/update-user.service");
 const get_user_service_1 = require("../services/user/get-user.service");
+const delete_user_service_1 = require("../services/user/delete-user.service");
 const checkReferralController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const query = req.query.referralCode;
@@ -49,3 +50,14 @@ const getUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.getUserController = getUserController;
+const deleteUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const result = yield (0, delete_user_service_1.deleteUserService)(parseInt(id));
+        res.status(200).send(result);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.deleteUserController = deleteUserController;

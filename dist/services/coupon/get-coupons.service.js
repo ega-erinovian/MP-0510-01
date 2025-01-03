@@ -14,7 +14,9 @@ const prisma_1 = require("../../lib/prisma");
 const getCouponsService = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId, search, isUsed } = query;
-        const whereClause = {};
+        const whereClause = {
+            isUsed: "AVAILABLE",
+        };
         if (userId) {
             whereClause.userId = userId;
         }
