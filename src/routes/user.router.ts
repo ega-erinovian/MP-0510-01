@@ -15,7 +15,6 @@ router.get("/", checkReferralController);
 router.get("/:id", getUserController);
 router.patch(
   "/:id",
-  verifyToken,
   uploader().fields([{ name: "profilePicture", maxCount: 1 }]),
   fileFilter,
   updateUserController
