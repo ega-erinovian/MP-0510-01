@@ -108,6 +108,7 @@ export const getEventsService = async (query: GetEventQuery) => {
             id: true,
             fullName: true,
             profilePicture: true,
+            bankAccount: true,
           },
         },
         city: {

@@ -54,13 +54,14 @@ export const updateTransactionService = async (
       throw new Error("Transaction not found");
     }
 
+    const updateData: Partial<UpdateTransactionBody> = {};
+
     let secure_url = existingTransaction.paymentProof || "";
 
     if (paymentProof) {
       secure_url = (await cloudinaryUpload(paymentProof)).secure_url;
+      updateData.paymentProof = secure_url;
     }
-
-    const updateData: Partial<UpdateTransactionBody> = {};
 
     if (body.status) updateData.status = body.status;
 

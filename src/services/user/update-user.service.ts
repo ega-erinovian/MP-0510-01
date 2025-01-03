@@ -12,6 +12,7 @@ interface UpdateUserBody {
   cityId?: number;
   point?: number;
   pointExpired?: Date;
+  bankAccount?: string;
 }
 
 export const updateUserService = async (
@@ -55,6 +56,7 @@ export const updateUserService = async (
     if (body.fullName) updateData.fullName = body.fullName;
     if (body.email) updateData.email = body.email;
     if (body.phoneNumber) updateData.phoneNumber = body.phoneNumber;
+    if (body.bankAccount) updateData.bankAccount = body.bankAccount;
     if (body.password) updateData.password = hashedPassword;
     if (body.cityId !== undefined && !isNaN(body.cityId)) {
       updateData.cityId = Number(body.cityId);

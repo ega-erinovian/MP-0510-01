@@ -44,6 +44,8 @@ const updateUserService = (body, id, profilePicture) => __awaiter(void 0, void 0
             updateData.email = body.email;
         if (body.phoneNumber)
             updateData.phoneNumber = body.phoneNumber;
+        if (body.bankAccount)
+            updateData.bankAccount = body.bankAccount;
         if (body.password)
             updateData.password = hashedPassword;
         if (body.cityId !== undefined && !isNaN(body.cityId)) {

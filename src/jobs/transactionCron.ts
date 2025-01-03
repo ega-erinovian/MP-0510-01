@@ -49,10 +49,10 @@ cron.schedule("* * * * *", async () => {
     for (const transaction of unpaidTransactions) {
       await prisma.transaction.update({
         where: { id: transaction.id },
-        data: { status: "REJECTED" },
+        data: { status: "EXPIRED" },
       });
 
-      console.log(`Transaction ${transaction.id} updated to REJECTED.`);
+      console.log(`Transaction ${transaction.id} updated to EXPIRED.`);
     }
   } catch (error) {
     console.error("Error processing transactions:", error);
@@ -121,11 +121,9 @@ cron.schedule("* * * * *", async () => {
   console.log("Running cron job to check user's point expiries");
 
   try {
-    // Calculate date 3 months ago
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
-    // Set to beginning of the day for more precise comparison
     threeMonthsAgo.setHours(0, 0, 0, 0);
 
     const existingUser = await prisma.user.findMany({
@@ -135,12 +133,11 @@ cron.schedule("* * * * *", async () => {
           lte: 0,
         },
         pointExpired: {
-          lte: threeMonthsAgo, // Less than or equal to 3 months ago
+          lte: threeMonthsAgo,
         },
       },
     });
 
-    // Update each voucher to EXPIRED
     for (const user of existingUser) {
       await prisma.user.update({
         where: { id: user.id },

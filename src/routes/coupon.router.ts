@@ -15,7 +15,7 @@ const router = Router();
 
 router.get("/", getCouponsController);
 router.get("/:id", getCouponController);
-router.post("/", verifyToken, validateCreateCoupon, createCouponController);
+router.post("/", validateCreateCoupon, createCouponController);
 router.patch("/:id", verifyToken, validateUpdateCoupon, updateCouponController);
 
 export default router;

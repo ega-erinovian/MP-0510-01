@@ -1,6 +1,5 @@
 import { Prisma, PromoStatus } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
-import { PaginationQueryParams } from "../../types/pagination";
 
 interface GetCouponsQuery {
   userId?: number;
@@ -11,7 +10,9 @@ interface GetCouponsQuery {
 export const getCouponsService = async (query: GetCouponsQuery) => {
   try {
     const { userId, search, isUsed } = query;
-    const whereClause: Prisma.CouponWhereInput = {};
+    const whereClause: Prisma.CouponWhereInput = {
+      isUsed: "AVAILABLE",
+    };
 
     if (userId) {
       whereClause.userId = userId;

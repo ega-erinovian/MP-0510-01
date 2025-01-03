@@ -22,7 +22,14 @@ const registerService = (body, profilePicture) => __awaiter(void 0, void 0, void
         if (existingUser) {
             throw new Error("Account already exist");
         }
-        const { secure_url } = yield (0, cloudinary_1.cloudinaryUpload)(profilePicture);
+        let secure_url = "";
+        if (profilePicture === undefined) {
+            secure_url =
+                "https://res.cloudinary.com/dpeljv2vu/image/upload/v1734840028/blank-profile-picture-973460_640_enmtle.webp";
+        }
+        else {
+            secure_url = (yield (0, cloudinary_1.cloudinaryUpload)(profilePicture)).secure_url;
+        }
         const hashedPassword = yield (0, argon_1.hashPassword)(password);
         return yield prisma_1.prisma.user.create({
             data: Object.assign(Object.assign({}, body), { cityId: typeof body.cityId === "string"

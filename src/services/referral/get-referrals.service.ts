@@ -2,13 +2,19 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 import { PaginationQueryParams } from "../../types/pagination";
 
-interface GetReferralsQuery extends PaginationQueryParams {}
+interface GetReferralsQuery extends PaginationQueryParams {
+  userId?: number;
+}
 
 export const getReferralsService = async (query: GetReferralsQuery) => {
   try {
-    const { page, sortBy, sortOrder, take } = query;
+    const { page, sortBy, sortOrder, take, userId } = query;
 
     const whereClause: Prisma.ReferralWhereInput = {};
+
+    if (userId) {
+      whereClause.referrerUserId = userId;
+    }
 
     const referrals = await prisma.referral.findMany({
       where: whereClause,
@@ -16,6 +22,7 @@ export const getReferralsService = async (query: GetReferralsQuery) => {
         refereeUser: {
           select: {
             fullName: true,
+            createdAt: true,
           },
         },
       },

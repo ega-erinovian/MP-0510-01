@@ -27,6 +27,7 @@ export const getReferralsController = async (
       sortBy: (req.query.sortBy as string) || "id",
       sortOrder: (req.query.sortOrder as string) || "desc",
       referralCode: (req.query.referralCode as string) || "",
+      userId: parseInt(req.query.userId as string) || 0,
     };
 
     const result = await getReferralsService(query);

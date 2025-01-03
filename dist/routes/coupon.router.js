@@ -7,6 +7,6 @@ const jwt_1 = require("../lib/jwt");
 const router = (0, express_1.Router)();
 router.get("/", coupon_controller_1.getCouponsController);
 router.get("/:id", coupon_controller_1.getCouponController);
-router.post("/", jwt_1.verifyToken, coupon_validator_1.validateCreateCoupon, coupon_controller_1.createCouponController);
+router.post("/", coupon_validator_1.validateCreateCoupon, coupon_controller_1.createCouponController);
 router.patch("/:id", jwt_1.verifyToken, coupon_validator_1.validateUpdateCoupon, coupon_controller_1.updateCouponController);
 exports.default = router;

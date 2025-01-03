@@ -9,33 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getReferralsService = void 0;
+exports.deleteUserService = void 0;
 const prisma_1 = require("../../lib/prisma");
-const getReferralsService = (query) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteUserService = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { page, sortBy, sortOrder, take, userId } = query;
-        const whereClause = {};
-        if (userId) {
-            whereClause.referrerUserId = userId;
+        // Find the existing voucher by ID
+        const existingUser = yield prisma_1.prisma.user.findUnique({
+            where: { id },
+        });
+        if (!existingUser) {
+            throw new Error("User not found");
         }
-        const referrals = yield prisma_1.prisma.referral.findMany({
-            where: whereClause,
-            include: {
-                refereeUser: {
-                    select: {
-                        fullName: true,
-                        createdAt: true,
-                    },
-                },
-            },
+        yield prisma_1.prisma.user.delete({
+            where: { id },
         });
-        const count = yield prisma_1.prisma.referral.count({
-            where: whereClause,
-        });
-        return { data: referrals, meta: { page, take, total: count } };
+        return { message: `User #${id} deleted successfully` };
     }
     catch (error) {
         throw error;
     }
 });
-exports.getReferralsService = getReferralsService;
+exports.deleteUserService = deleteUserService;

@@ -33,6 +33,7 @@ const getEventService = (id) => __awaiter(void 0, void 0, void 0, function* () {
                         id: true,
                         fullName: true,
                         email: true,
+                        bankAccount: true,
                     },
                 },
             },

@@ -30,6 +30,7 @@ const getReferralsController = (req, res, next) => __awaiter(void 0, void 0, voi
             sortBy: req.query.sortBy || "id",
             sortOrder: req.query.sortOrder || "desc",
             referralCode: req.query.referralCode || "",
+            userId: parseInt(req.query.userId) || 0,
         };
         const result = yield (0, get_referrals_service_1.getReferralsService)(query);
         res.status(200).send(result);

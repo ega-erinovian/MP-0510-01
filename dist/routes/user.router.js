@@ -2,10 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const user_controller_1 = require("../controllers/user.controller");
-const multer_1 = require("../lib/multer");
 const fileFilter_1 = require("../lib/fileFilter");
+const jwt_1 = require("../lib/jwt");
+const multer_1 = require("../lib/multer");
 const router = (0, express_1.Router)();
 router.get("/", user_controller_1.checkReferralController);
 router.get("/:id", user_controller_1.getUserController);
-router.patch("/:id", (0, multer_1.uploader)().fields([{ name: "profilePicture", maxCount: 1 }]), fileFilter_1.fileFilter, user_controller_1.updateUserController);
+router.patch("/:id", jwt_1.verifyToken, (0, multer_1.uploader)().fields([{ name: "profilePicture", maxCount: 1 }]), fileFilter_1.fileFilter, user_controller_1.updateUserController);
+router.delete("/:id", user_controller_1.deleteUserController);
 exports.default = router;
