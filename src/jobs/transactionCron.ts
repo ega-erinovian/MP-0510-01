@@ -23,6 +23,89 @@ cron.schedule("* * * * *", async () => {
         data: { status: "EXPIRED" },
       });
 
+      await prisma.event.update({
+        where: { id: transaction.id },
+        data: {
+          availableSeats: {
+            increment: transaction.qty,
+          },
+        },
+      });
+
+      if (transaction.voucherId) {
+        await prisma.voucher.update({
+          where: { id: transaction.voucherId },
+          data: {
+            isUsed: "AVAILABLE",
+          },
+        });
+      }
+
+      if (transaction.couponId) {
+        await prisma.coupon.update({
+          where: { id: transaction.couponId },
+          data: {
+            isUsed: "AVAILABLE",
+          },
+        });
+      }
+
+      if (transaction.isUsePoint) {
+        const event = await prisma.event.findFirst({
+          where: {
+            id: transaction.eventId,
+          },
+          select: {
+            price: true,
+          },
+        });
+
+        const totalPriceBeforePoint = event?.price! * transaction.qty;
+
+        let usedPoint = 0;
+
+        if (transaction.isUsePoint) {
+          let usedVoucher = null;
+          let usedCoupon = null;
+          if (transaction.voucherId) {
+            usedVoucher = await prisma.voucher.findFirst({
+              where: {
+                id: transaction.voucherId,
+              },
+              select: {
+                amount: true,
+              },
+            });
+          }
+          if (transaction.couponId) {
+            usedCoupon = await prisma.coupon.findFirst({
+              where: {
+                id: transaction.couponId,
+              },
+              select: {
+                amount: true,
+              },
+            });
+          }
+
+          const adjustedPrice =
+            totalPriceBeforePoint -
+            (usedVoucher?.amount || 0) -
+            (usedCoupon?.amount || 0);
+
+          usedPoint = adjustedPrice - transaction.totalPrice;
+        }
+
+        await prisma.user.update({
+          where: { id: transaction.userId },
+          data: {
+            point: {
+              increment: transaction.totalPrice - usedPoint,
+            },
+          },
+        });
+      }
+
       console.log(`Transaction ${transaction.id} updated to EXPIRED.`);
     }
   } catch (error) {
@@ -52,6 +135,89 @@ cron.schedule("* * * * *", async () => {
         data: { status: "EXPIRED" },
       });
 
+      await prisma.event.update({
+        where: { id: transaction.id },
+        data: {
+          availableSeats: {
+            increment: transaction.qty,
+          },
+        },
+      });
+
+      if (transaction.voucherId) {
+        await prisma.voucher.update({
+          where: { id: transaction.voucherId },
+          data: {
+            isUsed: "AVAILABLE",
+          },
+        });
+      }
+
+      if (transaction.couponId) {
+        await prisma.coupon.update({
+          where: { id: transaction.couponId },
+          data: {
+            isUsed: "AVAILABLE",
+          },
+        });
+      }
+
+      if (transaction.isUsePoint) {
+        const event = await prisma.event.findFirst({
+          where: {
+            id: transaction.eventId,
+          },
+          select: {
+            price: true,
+          },
+        });
+
+        const totalPriceBeforePoint = event?.price! * transaction.qty;
+
+        let usedPoint = 0;
+
+        if (transaction.isUsePoint) {
+          let usedVoucher = null;
+          let usedCoupon = null;
+          if (transaction.voucherId) {
+            usedVoucher = await prisma.voucher.findFirst({
+              where: {
+                id: transaction.voucherId,
+              },
+              select: {
+                amount: true,
+              },
+            });
+          }
+          if (transaction.couponId) {
+            usedCoupon = await prisma.coupon.findFirst({
+              where: {
+                id: transaction.couponId,
+              },
+              select: {
+                amount: true,
+              },
+            });
+          }
+
+          const adjustedPrice =
+            totalPriceBeforePoint -
+            (usedVoucher?.amount || 0) -
+            (usedCoupon?.amount || 0);
+
+          usedPoint = adjustedPrice - transaction.totalPrice;
+        }
+
+        await prisma.user.update({
+          where: { id: transaction.userId },
+          data: {
+            point: {
+              increment: transaction.totalPrice - usedPoint,
+            },
+          },
+        });
+      }
+
       console.log(`Transaction ${transaction.id} updated to EXPIRED.`);
     }
   } catch (error) {
@@ -72,7 +238,6 @@ cron.schedule("* * * * *", async () => {
       },
     });
 
-    // Update each voucher to EXPIRED
     for (const voucher of availableVoucher) {
       await prisma.voucher.update({
         where: { id: voucher.id },
@@ -101,7 +266,6 @@ cron.schedule("* * * * *", async () => {
       },
     });
 
-    // Update each voucher to EXPIRED
     for (const coupon of availableCoupon) {
       await prisma.coupon.update({
         where: { id: coupon.id },
