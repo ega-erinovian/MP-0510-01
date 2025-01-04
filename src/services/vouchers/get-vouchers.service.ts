@@ -1,4 +1,4 @@
-import { Prisma, PromoStatus } from "@prisma/client";
+import { Prisma, Voucher } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 import { PaginationQueryParams } from "../../types/pagination";
 
@@ -6,7 +6,7 @@ interface GetVouchersQuery extends PaginationQueryParams {
   search?: string;
   eventId?: number;
   userId?: number;
-  isUsed?: PromoStatus;
+  isUsed?: Voucher["isUsed"];
 }
 
 export const getVouchersService = async (query: GetVouchersQuery) => {
@@ -19,7 +19,7 @@ export const getVouchersService = async (query: GetVouchersQuery) => {
     const whereClause: Prisma.VoucherWhereInput = {};
 
     if (parsedEventId) {
-      whereClause.eventId = parsedEventId; // Use parsed value
+      whereClause.eventId = parsedEventId;
     }
 
     if (isUsed) {

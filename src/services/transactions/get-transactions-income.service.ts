@@ -7,22 +7,12 @@ interface GetTransactionIncomeQuery {
   userId?: number;
 }
 
-export enum Status {
-  UNPAID = "UNPAID",
-  CONFIRMING = "CONFIRMING",
-  DONE = "DONE",
-  REJECTED = "REJECTED",
-  EXPIRED = "EXPIRED",
-  CANCELED = "CANCELED",
-}
-
 export const getTransactionIncomeService = async (
   query: GetTransactionIncomeQuery
 ) => {
   try {
     const { timeFilter, eventId, userId } = query;
 
-    // Calculate the date range based on the time filter
     const now = new Date();
     let startDate = new Date();
 
@@ -49,7 +39,7 @@ export const getTransactionIncomeService = async (
         gte: startDate,
         lte: now,
       },
-      status: Status.DONE,
+      status: "DONE",
     };
 
     if (eventId) {

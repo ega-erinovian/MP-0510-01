@@ -1,3 +1,4 @@
+import { Transaction } from "@prisma/client";
 import { cloudinaryUpload } from "../../lib/cloudinary";
 import { transporter } from "../../lib/nodemailer";
 import { prisma } from "../../lib/prisma";
@@ -7,17 +8,8 @@ import {
   replaceTemplateVariables,
 } from "../../utils/TemplateUtils";
 
-export enum Status {
-  UNPAID = "UNPAID",
-  CONFIRMING = "CONFIRMING",
-  DONE = "DONE",
-  REJECTED = "REJECTED",
-  EXPIRED = "EXPIRED",
-  CANCELED = "CANCELED",
-}
-
 interface UpdateTransactionBody {
-  status?: Status;
+  status?: Transaction["status"];
   email?: string;
   paymentProof?: string;
   voucherId?: number | null;
@@ -92,7 +84,7 @@ export const updateTransactionService = async (
       data: updateData,
     });
 
-    if (body.status === Status.DONE || body.status === Status.REJECTED) {
+    if (body.status === "DONE" || body.status === "REJECTED") {
       try {
         const template = await loadEmailTemplate();
 
@@ -125,7 +117,7 @@ export const updateTransactionService = async (
           html: emailContent,
         });
 
-        if (body.status === Status.REJECTED) {
+        if (body.status === "REJECTED") {
           await transporter.sendMail({
             to: body.email,
             subject: `Rejected Transaction Alert - ID: ${id}`,

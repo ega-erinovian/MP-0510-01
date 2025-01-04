@@ -7,15 +7,6 @@ interface GetTransactionQuantityQuery {
   userId?: number;
 }
 
-export enum Status {
-  UNPAID = "UNPAID",
-  CONFIRMING = "CONFIRMING",
-  DONE = "DONE",
-  REJECTED = "REJECTED",
-  EXPIRED = "EXPIRED",
-  CANCELED = "CANCELED",
-}
-
 export const getTransactionQuantityService = async (
   query: GetTransactionQuantityQuery
 ) => {
@@ -48,7 +39,7 @@ export const getTransactionQuantityService = async (
         gte: startDate,
         lte: now,
       },
-      status: Status.DONE,
+      status: "DONE",
     };
 
     if (eventId) {

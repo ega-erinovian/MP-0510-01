@@ -1,10 +1,10 @@
-import { Prisma, PromoStatus } from "@prisma/client";
+import { Coupon, Prisma } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
 interface GetCouponsQuery {
   userId?: number;
   search?: string;
-  isUsed?: PromoStatus;
+  isUsed?: Coupon["isUsed"];
 }
 
 export const getCouponsService = async (query: GetCouponsQuery) => {

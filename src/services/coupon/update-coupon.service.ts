@@ -1,4 +1,4 @@
-import { PromoStatus } from "@prisma/client";
+import { Coupon } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
 interface UpdateCouponBody {
@@ -6,7 +6,7 @@ interface UpdateCouponBody {
   code?: string;
   amount?: number;
   expiresAt?: Date;
-  isUsed?: PromoStatus;
+  isUsed?: Coupon["isUsed"];
 }
 
 export const updateCouponService = async (

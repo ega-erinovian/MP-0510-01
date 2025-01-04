@@ -10,7 +10,7 @@ interface CreateTransactionBody {
   couponId?: number;
   userId: number;
   eventId: number;
-  isUsePoint?: boolean | string; // Allow string or boolean input for isUsePoint
+  isUsePoint?: boolean | string;
 }
 
 export const createTransactionService = async (
@@ -24,7 +24,6 @@ export const createTransactionService = async (
       secure_url = (await cloudinaryUpload(paymentProof)).secure_url;
     }
 
-    // Build transaction data object
     const transactionData: any = {
       status: body.status,
       qty: Number(body.qty),
@@ -38,7 +37,6 @@ export const createTransactionService = async (
           : body.isUsePoint ?? false,
     };
 
-    // Optional fields (voucher, coupon)
     if (body.voucherId !== undefined) {
       transactionData.voucherId = Number(body.voucherId);
     }
@@ -47,7 +45,6 @@ export const createTransactionService = async (
       transactionData.couponId = Number(body.couponId);
     }
 
-    // Create the transaction
     return await prisma.transaction.create({
       data: transactionData,
     });

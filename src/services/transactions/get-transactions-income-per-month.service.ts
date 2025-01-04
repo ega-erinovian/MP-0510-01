@@ -6,25 +6,15 @@ interface GetTransactionIncomePerMonthQuery {
   userId?: number;
 }
 
-export enum Status {
-  UNPAID = "UNPAID",
-  CONFIRMING = "CONFIRMING",
-  DONE = "DONE",
-  REJECTED = "REJECTED",
-  EXPIRED = "EXPIRED",
-  CANCELED = "CANCELED",
-}
-
 export const getTransactionIncomePerMonthService = async (
   query: GetTransactionIncomePerMonthQuery
 ) => {
   try {
     const { eventId, userId } = query;
 
-    // Set the date range for the entire year
     const now = new Date();
-    const startDate = new Date(now.getFullYear(), 0, 1); // January 1st of the current year
-    const endDate = new Date(now.getFullYear() + 1, 0, 1); // January 1st of the next year
+    const startDate = new Date(now.getFullYear(), 0, 1);
+    const endDate = new Date(now.getFullYear() + 1, 0, 1);
 
     const whereClause: Prisma.TransactionWhereInput = {
       isDeleted: false,
@@ -32,7 +22,7 @@ export const getTransactionIncomePerMonthService = async (
         gte: startDate,
         lt: endDate,
       },
-      status: Status.DONE,
+      status: "DONE",
     };
 
     if (eventId) {
@@ -62,8 +52,8 @@ export const getTransactionIncomePerMonthService = async (
     }));
 
     transactions.forEach((transaction) => {
-      const monthIndex = transaction.createdAt.getMonth(); // Get month index (0-11)
-      monthlyChart[monthIndex].value += transaction._sum.totalPrice || 0; // Sum totalPrice
+      const monthIndex = transaction.createdAt.getMonth();
+      monthlyChart[monthIndex].value += transaction._sum.totalPrice || 0;
     });
 
     return monthlyChart;

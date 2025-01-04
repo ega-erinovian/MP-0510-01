@@ -1,4 +1,4 @@
-import { PromoStatus } from "@prisma/client";
+import { Voucher } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
 interface UpdateVoucherBody {
@@ -6,7 +6,7 @@ interface UpdateVoucherBody {
   code?: string;
   amount?: number;
   expiresAt?: Date;
-  isUsed?: PromoStatus;
+  isUsed?: Voucher["isUsed"];
 }
 
 export const updateVoucherService = async (
@@ -16,7 +16,6 @@ export const updateVoucherService = async (
   try {
     const { code } = body;
 
-    // Find the existing voucher by ID
     const existingVoucher = await prisma.voucher.findUnique({
       where: { id },
     });
@@ -25,7 +24,6 @@ export const updateVoucherService = async (
       throw new Error("Voucher not found");
     }
 
-    // Only check for an existing voucher with the same code if it's different from the current voucher's code
     if (code && code !== existingVoucher.code) {
       const voucherWithCode = await prisma.voucher.findFirst({
         where: { code },

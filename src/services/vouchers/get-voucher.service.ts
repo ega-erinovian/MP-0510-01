@@ -2,7 +2,6 @@ import { prisma } from "../../lib/prisma";
 
 export const getVoucherService = async (id: number) => {
   try {
-    // Find the existing voucher by ID
     const voucher = await prisma.voucher.findUnique({
       where: { id },
       include: {
