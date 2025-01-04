@@ -31,7 +31,7 @@ export const validateCreateTransaction = [
 
 export const validateUpdateTransaction = [
   body("status")
-    .notEmpty()
+    .optional()
     .withMessage("Status is required")
     .isString()
     .withMessage("Status must be a string")
@@ -41,6 +41,8 @@ export const validateUpdateTransaction = [
       }
       return true;
     }),
+
+  body("email").optional().isEmail().withMessage("Invalid email format"),
 
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
