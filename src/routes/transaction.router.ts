@@ -12,10 +12,7 @@ import {
 import { fileFilter } from "../lib/fileFilter";
 import { verifyToken } from "../lib/jwt";
 import { uploader } from "../lib/multer";
-import {
-  validateCreateTransaction,
-  validateUpdateTransaction,
-} from "../validators/transaction.validator";
+import { validateCreateTransaction } from "../validators/transaction.validator";
 
 const router = Router();
 
@@ -37,7 +34,6 @@ router.patch(
   verifyToken,
   uploader().fields([{ name: "paymentProof", maxCount: 1 }]),
   fileFilter,
-  validateUpdateTransaction,
   updateTransactionController
 );
 router.delete("/:id", verifyToken, deleteTransactionController);

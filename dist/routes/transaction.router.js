@@ -13,6 +13,6 @@ router.get("/filter/income", transaction_controller_1.getTransactionsIncomeContr
 router.get("/filter/income-per-month", transaction_controller_1.getTransactionsIncomePerMonthController);
 router.get("/:id/time-left", transaction_controller_1.getRemainingTimeController);
 router.post("/", jwt_1.verifyToken, (0, multer_1.uploader)().fields([{ name: "paymentProof", maxCount: 1 }]), fileFilter_1.fileFilter, transaction_validator_1.validateCreateTransaction, transaction_controller_1.createTransactionController);
-router.patch("/:id", jwt_1.verifyToken, (0, multer_1.uploader)().fields([{ name: "paymentProof", maxCount: 1 }]), fileFilter_1.fileFilter, transaction_validator_1.validateUpdateTransaction, transaction_controller_1.updateTransactionController);
+router.patch("/:id", jwt_1.verifyToken, (0, multer_1.uploader)().fields([{ name: "paymentProof", maxCount: 1 }]), fileFilter_1.fileFilter, transaction_controller_1.updateTransactionController);
 router.delete("/:id", jwt_1.verifyToken, transaction_controller_1.deleteTransactionController);
 exports.default = router;
