@@ -19,7 +19,6 @@ const createTransactionService = (body, paymentProof) => __awaiter(void 0, void 
         if (paymentProof) {
             secure_url = (yield (0, cloudinary_1.cloudinaryUpload)(paymentProof)).secure_url;
         }
-        // Build transaction data object
         const transactionData = {
             status: body.status,
             qty: Number(body.qty),
@@ -31,14 +30,12 @@ const createTransactionService = (body, paymentProof) => __awaiter(void 0, void 
                 ? body.isUsePoint === "true"
                 : (_a = body.isUsePoint) !== null && _a !== void 0 ? _a : false,
         };
-        // Optional fields (voucher, coupon)
         if (body.voucherId !== undefined) {
             transactionData.voucherId = Number(body.voucherId);
         }
         if (body.couponId !== undefined) {
             transactionData.couponId = Number(body.couponId);
         }
-        // Create the transaction
         return yield prisma_1.prisma.transaction.create({
             data: transactionData,
         });

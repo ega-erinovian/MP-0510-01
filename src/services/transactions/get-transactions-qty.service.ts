@@ -39,7 +39,9 @@ export const getTransactionQuantityService = async (
         gte: startDate,
         lte: now,
       },
-      status: "DONE",
+      status: {
+        equals: "DONE",
+      },
     };
 
     if (eventId) {

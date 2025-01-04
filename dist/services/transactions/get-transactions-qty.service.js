@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTransactionQuantityService = void 0;
-const client_1 = require("@prisma/client");
 const prisma_1 = require("../../lib/prisma");
 const getTransactionQuantityService = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -39,7 +38,9 @@ const getTransactionQuantityService = (query) => __awaiter(void 0, void 0, void 
                 gte: startDate,
                 lte: now,
             },
-            status: client_1.Status.DONE,
+            status: {
+                equals: "DONE",
+            },
         };
         if (eventId) {
             whereClause.eventId = eventId;

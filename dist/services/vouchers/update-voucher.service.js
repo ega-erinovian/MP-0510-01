@@ -14,14 +14,12 @@ const prisma_1 = require("../../lib/prisma");
 const updateVoucherService = (body, id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { code } = body;
-        // Find the existing voucher by ID
         const existingVoucher = yield prisma_1.prisma.voucher.findUnique({
             where: { id },
         });
         if (!existingVoucher) {
             throw new Error("Voucher not found");
         }
-        // Only check for an existing voucher with the same code if it's different from the current voucher's code
         if (code && code !== existingVoucher.code) {
             const voucherWithCode = yield prisma_1.prisma.voucher.findFirst({
                 where: { code },

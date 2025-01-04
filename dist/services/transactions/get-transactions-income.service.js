@@ -10,12 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTransactionIncomeService = void 0;
-const client_1 = require("@prisma/client");
 const prisma_1 = require("../../lib/prisma");
 const getTransactionIncomeService = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { timeFilter, eventId, userId } = query;
-        // Calculate the date range based on the time filter
         const now = new Date();
         let startDate = new Date();
         switch (timeFilter) {
@@ -40,7 +38,9 @@ const getTransactionIncomeService = (query) => __awaiter(void 0, void 0, void 0,
                 gte: startDate,
                 lte: now,
             },
-            status: client_1.Status.DONE,
+            status: {
+                equals: "DONE",
+            },
         };
         if (eventId) {
             whereClause.eventId = eventId;

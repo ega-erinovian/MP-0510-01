@@ -13,7 +13,6 @@ exports.getVoucherService = void 0;
 const prisma_1 = require("../../lib/prisma");
 const getVoucherService = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Find the existing voucher by ID
         const voucher = yield prisma_1.prisma.voucher.findUnique({
             where: { id },
             include: {

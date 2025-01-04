@@ -22,7 +22,9 @@ export const getTransactionIncomePerMonthService = async (
         gte: startDate,
         lt: endDate,
       },
-      status: "DONE",
+      status: {
+        equals: "DONE",
+      },
     };
 
     if (eventId) {

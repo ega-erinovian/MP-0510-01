@@ -13,7 +13,6 @@ exports.deleteVoucherService = void 0;
 const prisma_1 = require("../../lib/prisma");
 const deleteVoucherService = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Find the existing voucher by ID
         const existingVoucher = yield prisma_1.prisma.voucher.findUnique({
             where: { id },
         });

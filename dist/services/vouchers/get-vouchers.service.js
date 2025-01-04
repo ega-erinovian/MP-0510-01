@@ -17,7 +17,7 @@ const getVouchersService = (query) => __awaiter(void 0, void 0, void 0, function
         const parsedEventId = eventId && Number(eventId);
         const whereClause = {};
         if (parsedEventId) {
-            whereClause.eventId = parsedEventId; // Use parsed value
+            whereClause.eventId = parsedEventId;
         }
         if (isUsed) {
             whereClause.isUsed = isUsed;

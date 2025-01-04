@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTransactionService = void 0;
 const prisma_1 = require("../../lib/prisma");
-const deleteTransactionService = (id /* userId: number */) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteTransactionService = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const transaction = yield prisma_1.prisma.transaction.findFirst({
             where: { id },
@@ -19,9 +19,6 @@ const deleteTransactionService = (id /* userId: number */) => __awaiter(void 0, 
         if (!transaction) {
             throw new Error("Transaction not found.");
         }
-        // if (blog.userId !== userId) {
-        //   throw new Error("You are not authorized to delete this blog.");
-        // }
         yield prisma_1.prisma.transaction.update({
             where: { id },
             data: { isDeleted: true },
