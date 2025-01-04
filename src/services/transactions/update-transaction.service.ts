@@ -59,8 +59,13 @@ export const updateTransactionService = async (
     let secure_url = existingTransaction.paymentProof || "";
 
     if (paymentProof) {
-      secure_url = (await cloudinaryUpload(paymentProof)).secure_url;
-      updateData.paymentProof = secure_url;
+      try {
+        secure_url = (await cloudinaryUpload(paymentProof)).secure_url;
+        updateData.paymentProof = secure_url;
+      } catch (uploadError) {
+        console.error("Error uploading file to Cloudinary:", uploadError);
+        throw new Error("File upload failed. Please try again.");
+      }
     }
 
     if (body.status) updateData.status = body.status;
