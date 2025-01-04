@@ -1,12 +1,20 @@
-import { Status, User } from "@prisma/client";
-import { prisma } from "../../lib/prisma";
-import { transporter } from "../../lib/nodemailer";
 import { cloudinaryUpload } from "../../lib/cloudinary";
+import { transporter } from "../../lib/nodemailer";
+import { prisma } from "../../lib/prisma";
 import {
   formatCurrency,
   loadEmailTemplate,
   replaceTemplateVariables,
 } from "../../utils/TemplateUtils";
+
+export enum Status {
+  UNPAID = "UNPAID",
+  CONFIRMING = "CONFIRMING",
+  DONE = "DONE",
+  REJECTED = "REJECTED",
+  EXPIRED = "EXPIRED",
+  CANCELED = "CANCELED",
+}
 
 interface UpdateTransactionBody {
   status?: Status;

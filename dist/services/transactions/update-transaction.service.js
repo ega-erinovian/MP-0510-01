@@ -9,12 +9,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateTransactionService = void 0;
-const client_1 = require("@prisma/client");
-const prisma_1 = require("../../lib/prisma");
-const nodemailer_1 = require("../../lib/nodemailer");
+exports.updateTransactionService = exports.Status = void 0;
 const cloudinary_1 = require("../../lib/cloudinary");
+const nodemailer_1 = require("../../lib/nodemailer");
+const prisma_1 = require("../../lib/prisma");
 const TemplateUtils_1 = require("../../utils/TemplateUtils");
+var Status;
+(function (Status) {
+    Status["UNPAID"] = "UNPAID";
+    Status["CONFIRMING"] = "CONFIRMING";
+    Status["DONE"] = "DONE";
+    Status["REJECTED"] = "REJECTED";
+    Status["EXPIRED"] = "EXPIRED";
+    Status["CANCELED"] = "CANCELED";
+})(Status || (exports.Status = Status = {}));
 const updateTransactionService = (body, id, paymentProof) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const existingTransaction = yield prisma_1.prisma.transaction.findUnique({
@@ -73,7 +81,7 @@ const updateTransactionService = (body, id, paymentProof) => __awaiter(void 0, v
             where: { id },
             data: updateData,
         });
-        if (body.status === client_1.Status.DONE || body.status === client_1.Status.REJECTED) {
+        if (body.status === Status.DONE || body.status === Status.REJECTED) {
             try {
                 const template = yield (0, TemplateUtils_1.loadEmailTemplate)();
                 const emailContent = (0, TemplateUtils_1.replaceTemplateVariables)(template, {
@@ -103,7 +111,7 @@ const updateTransactionService = (body, id, paymentProof) => __awaiter(void 0, v
                     subject: `Ticket Status Update for ${existingTransaction.event.title}`,
                     html: emailContent,
                 });
-                if (body.status === client_1.Status.REJECTED) {
+                if (body.status === Status.REJECTED) {
                     yield nodemailer_1.transporter.sendMail({
                         to: body.email,
                         subject: `Rejected Transaction Alert - ID: ${id}`,
