@@ -1,4 +1,4 @@
-import { Prisma, Status } from "@prisma/client";
+import { Prisma, Transaction } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 import { PaginationQueryParams } from "../../types/pagination";
 
@@ -33,7 +33,7 @@ export const getTransactionsService = async (query: GetTransactionsQuery) => {
     }
 
     if (status) {
-      whereClause.status = status as Status;
+      whereClause.status = status as Transaction["status"];
     }
 
     if (search) {

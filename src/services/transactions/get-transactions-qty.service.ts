@@ -1,10 +1,19 @@
-import { Prisma, Status } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
 interface GetTransactionQuantityQuery {
   timeFilter: string;
   eventId?: number;
   userId?: number;
+}
+
+export enum Status {
+  UNPAID = "UNPAID",
+  CONFIRMING = "CONFIRMING",
+  DONE = "DONE",
+  REJECTED = "REJECTED",
+  EXPIRED = "EXPIRED",
+  CANCELED = "CANCELED",
 }
 
 export const getTransactionQuantityService = async (

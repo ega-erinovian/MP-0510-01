@@ -1,9 +1,18 @@
-import { Prisma, Status } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
 interface GetTransactionIncomePerMonthQuery {
   eventId?: number;
   userId?: number;
+}
+
+export enum Status {
+  UNPAID = "UNPAID",
+  CONFIRMING = "CONFIRMING",
+  DONE = "DONE",
+  REJECTED = "REJECTED",
+  EXPIRED = "EXPIRED",
+  CANCELED = "CANCELED",
 }
 
 export const getTransactionIncomePerMonthService = async (
@@ -36,7 +45,6 @@ export const getTransactionIncomePerMonthService = async (
       };
     }
 
-    // Fetch transactions grouped by month
     const transactions = await prisma.transaction.groupBy({
       by: ["createdAt"],
       where: whereClause,
@@ -48,13 +56,11 @@ export const getTransactionIncomePerMonthService = async (
       },
     });
 
-    // Initialize monthly chart with zero values
     const monthlyChart = Array.from({ length: 12 }, (_, index) => ({
       month: new Date(0, index).toLocaleString("default", { month: "long" }),
       value: 0,
     }));
 
-    // Sum up total prices for each month
     transactions.forEach((transaction) => {
       const monthIndex = transaction.createdAt.getMonth(); // Get month index (0-11)
       monthlyChart[monthIndex].value += transaction._sum.totalPrice || 0; // Sum totalPrice
